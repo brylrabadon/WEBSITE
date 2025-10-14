@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Contact Us | Loan System</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+</head>
+<body>
+
+    <nav class="navbar">
+        <div class="container">
+            <div class="logo">LOAN SYSTEM</div>
+            <ul class="nav-links">
+                <li><a href="{{ url_for('home') }}">HOME</a></li>
+                <li><a href="{{ url_for('about') }}">ABOUT US</a></li>
+                <li><a href="{{ url_for('contact') }}" class="active">CONTACT</a></li>
+                <li><a href="{{ url_for('logout') }}">LOGOUT</a></li>
+            </ul>
+        </div>
+    </nav>
+
+    <div class="content-container">
+        <div class="info-card">
+            <h2>Contact Us</h2>
+            <p>We’d love to hear from you! Reach out to our support team for any questions or feedback.</p>
+
+            <ul class="contact-info">
+                <li><strong>Email:</strong> support@loansystem.com</li>
+                <li><strong>Phone:</strong> +63 912 345 6789</li>
+                <li><strong>Address:</strong> 123 FinTech Avenue, Quezon City, Philippines</li>
+            </ul>
+
+            <p>We’ll get back to you as soon as possible. 💌</p>
+        </div>
+    </div>
+
+</body>
+</html>

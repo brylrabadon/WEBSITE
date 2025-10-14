@@ -1,0 +1,184 @@
+/* --- Reset & Base Styles --- */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: 'Segoe UI', sans-serif;
+    background-image: url("../images/loan.png");
+    background-size: cover;
+    background-repeat: no-repeat;
+    background-position: center;
+    height: 100vh;
+}
+
+/* --- Navigation --- */
+.navbar {
+    background-color: rgba(255, 255, 255, 0.95);
+    padding: 1rem 2rem;
+    box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+    position: sticky;
+    top: 0;
+}
+
+.container {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.logo {
+    font-size: 1.5rem;
+    font-weight: bold;
+    color: hotpink;
+}
+
+.nav-links {
+    list-style: none;
+    display: flex;
+    gap: 1.5rem;
+}
+
+.nav-links a {
+    text-decoration: none;
+    color: #333;
+    font-weight: 500;
+    transition: color 0.3s;
+}
+
+.nav-links a:hover {
+    color: hotpink;
+}
+
+/* --- Login Form --- */
+.login-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: calc(100vh - 100px);
+    padding-top: 40px;
+}
+
+.login-form {
+    background: rgba(255, 255, 255, 0.97);
+    padding: 30px;
+    border-radius: 10px;
+    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.15);
+    width: 100%;
+    max-width: 380px;
+}
+
+.login-form h2 {
+    text-align: center;
+    margin-bottom: 20px;
+    color: #333;
+}
+
+.form-group {
+    margin-bottom: 20px;
+}
+
+.form-group label {
+    font-weight: 600;
+    color: #444;
+}
+
+.form-group input {
+    width: 100%;
+    padding: 10px;
+    margin-top: 6px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+}
+
+.form-actions {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-size: 0.9em;
+    margin-bottom: 20px;
+}
+
+.form-actions a {
+    color: hotpink;
+    text-decoration: none;
+}
+
+.form-links {
+    text-align: center;
+    font-size: 0.9em;
+}
+
+.form-links a {
+    color: hotpink;
+    text-decoration: none;
+}
+
+.login-button {
+    width: 100%;
+    padding: 10px;
+    background-color: hotpink;
+    color: white;
+    border: none;
+    border-radius: 4px;
+    font-size: 1rem;
+    font-weight: bold;
+    cursor: pointer;
+    transition: background-color 0.3s;
+}
+
+.login-button:hover {
+    background-color: #ff5cad;
+}
+
+/* --- Content Pages (About & Contact) --- */
+.content-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: calc(100vh - 100px);
+    padding: 20px;
+}
+
+.info-card {
+    background: rgba(255, 255, 255, 0.95);
+    padding: 40px;
+    border-radius: 10px;
+    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.15);
+    max-width: 700px;
+    width: 90%;
+    text-align: center;
+}
+
+.info-card h2 {
+    color: hotpink;
+    margin-bottom: 15px;
+}
+
+.info-card p {
+    color: #333;
+    margin-bottom: 15px;
+    line-height: 1.6;
+}
+
+.contact-info {
+    list-style: none;
+    padding: 0;
+    margin: 15px 0;
+}
+
+.contact-info li {
+    margin-bottom: 10px;
+    font-weight: 500;
+}
+
+.login-form p {
+    font-size: 0.95em;
+    line-height: 1.5;
+}
+
+.login-form a:hover {
+    text-decoration: underline;
+}

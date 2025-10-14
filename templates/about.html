@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>About Us | Loan System</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+</head>
+<body>
+
+    <nav class="navbar">
+        <div class="container">
+            <div class="logo">LOAN SYSTEM</div>
+            <ul class="nav-links">
+                <li><a href="{{ url_for('home') }}">HOME</a></li>
+                <li><a href="{{ url_for('about') }}" class="active">ABOUT US</a></li>
+                <li><a href="{{ url_for('contact') }}">CONTACT</a></li>
+                <li><a href="{{ url_for('logout') }}">LOGOUT</a></li>
+            </ul>
+        </div>
+    </nav>
+
+    <div class="content-container">
+        <div class="info-card">
+            <h2>About Our Loan System</h2>
+            <p>
+                Welcome to <strong>Loan System</strong> — your trusted platform for managing loans with ease,
+                security, and transparency. Our system is designed to help borrowers and administrators
+                efficiently handle loan requests, approvals, and payments in one place.
+            </p>
+
+            <p>
+                Whether you are a borrower looking for assistance or an admin managing clients,
+                our mission is to make financial transactions smoother and more reliable.
+            </p>
+
+            <p><strong>Empowering Financial Confidence — One Loan at a Time.</strong></p>
+        </div>
+    </div>
+
+</body>
+</html>
