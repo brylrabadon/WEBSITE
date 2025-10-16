@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Borrower Dashboard | Loan System</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+</head>
+<body>
+
+    <nav class="navbar">
+        <div class="container">
+            <div class="logo">LOAN SYSTEM - BORROWER</div>
+            <ul class="nav-links">
+                <li><a href="{{ url_for('dashboard') }}">DASHBOARD</a></li>
+                <li><a href="{{ url_for('about') }}">ABOUT</a></li>
+                <li><a href="{{ url_for('contact') }}">CONTACT</a></li>
+                <li><a href="{{ url_for('logout') }}">LOGOUT</a></li>
+            </ul>
+        </div>
+    </nav>
+
+    <div class="content-container">
+        <h2>Welcome, {{ fullname }}!</h2>
+        <p>You are logged in as <strong>Borrower</strong>.</p>
+
+        <div class="dashboard-section">
+            <h3>Your Loan Information</h3>
+            <ul>
+                <li>Loan ID: <strong>#12345</strong></li>
+                <li>Amount: <strong>₱25,000</strong></li>
+                <li>Status: <strong>Active</strong></li>
+                <li>Next Payment Due: <strong>Oct 30, 2025</strong></li>
+            </ul>
+        </div>
+
+        <div class="dashboard-section">
+            <h3>Quick Actions</h3>
+            <button class="btn">Apply for Loan</button>
+            <button class="btn">View Payment History</button>
+            <button class="btn">Update Profile</button>
+        </div>
+    </div>
+
+</body>
+</html>

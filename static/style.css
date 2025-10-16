@@ -7,7 +7,7 @@
 
 body {
     font-family: 'Segoe UI', sans-serif;
-    background-image: url("../images/loan.png");
+    background-image: url("https://tonikbank.com/sites/default/files/styles/blog_main_landing_page/public/2022-06/1248x589%20-%20Main.png.webp?itok=NFN3DYg3");
     background-size: cover;
     background-repeat: no-repeat;
     background-position: center;
@@ -62,13 +62,16 @@ body {
 }
 
 .login-form {
-    background: rgba(255, 255, 255, 0.97);
+    background: rgba(255, 255, 255, 0.5); /* More transparent */
+    backdrop-filter: blur(10px); /* Frosted glass effect */
     padding: 30px;
     border-radius: 10px;
-    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.15);
+    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.1);
     width: 100%;
     max-width: 380px;
+    border: 1px solid rgba(255, 255, 255, 0.4);
 }
+
 
 .login-form h2 {
     text-align: center;
@@ -181,4 +184,36 @@ body {
 
 .login-form a:hover {
     text-decoration: underline;
+}
+
+.content-container {
+    max-width: 900px;
+    margin: 40px auto;
+    padding: 30px;
+    background: #fff;
+    border-radius: 12px;
+    box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+}
+
+.dashboard-section {
+    margin-top: 30px;
+}
+
+.dashboard-section h3 {
+    color: #333;
+    margin-bottom: 10px;
+}
+
+.btn {
+    padding: 10px 20px;
+    background: #007bff;
+    color: #fff;
+    border: none;
+    border-radius: 8px;
+    margin-right: 10px;
+    cursor: pointer;
+}
+
+.btn:hover {
+    background: #0056b3;
 }
