@@ -3,11 +3,11 @@
 <head>
     <meta charset="UTF-8">
     <title>Borrower Dashboard | Loan System</title>
-    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
 </head>
 <body>
 
-    <nav class="navbar">
+    <nav class="dashboard-nav">
         <div class="container">
             <div class="logo">LOAN SYSTEM - BORROWER</div>
             <ul class="nav-links">
@@ -19,7 +19,7 @@
         </div>
     </nav>
 
-    <div class="content-container">
+    <div class="dashboard-wrapper">
         <h2>Welcome, {{ fullname }}!</h2>
         <p>You are logged in as <strong>Borrower</strong>.</p>
 
@@ -35,9 +35,9 @@
 
         <div class="dashboard-section">
             <h3>Quick Actions</h3>
-            <button class="btn">Apply for Loan</button>
-            <button class="btn">View Payment History</button>
-            <button class="btn">Update Profile</button>
+            <button class="btn primary-btn">Apply for Loan</button>
+            <button class="btn secondary-btn">View Payment History</button>
+            <button class="btn tertiary-btn">Update Profile</button>
         </div>
     </div>
 

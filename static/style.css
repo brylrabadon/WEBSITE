@@ -1,4 +1,6 @@
-/* --- Reset & Base Styles --- */
+/* --- Professional Reset & Base Styles --- */
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@100..900&display=swap');
+
 * {
     margin: 0;
     padding: 0;
@@ -6,214 +8,550 @@
 }
 
 body {
-    font-family: 'Segoe UI', sans-serif;
-    background-image: url("https://tonikbank.com/sites/default/files/styles/blog_main_landing_page/public/2022-06/1248x589%20-%20Main.png.webp?itok=NFN3DYg3");
-    background-size: cover;
-    background-repeat: no-repeat;
-    background-position: center;
+    font-family: 'Inter', 'Segoe UI', sans-serif;
     height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    font-size: 16px;
+
+    /* --- LOAN SYSTEM BACKGROUND STYLES (UPDATED FOR FULL COVERAGE) --- */
+    background-image: url('https://media.licdn.com/dms/image/sync/v2/D4E27AQE1Gy94tMIYzA/articleshare-shrink_800/B4EZhVGvXdGUAI-/0/1754984194154?e=2147483647&v=beta&t=qX4pZbdXekMuGwrFI4r_kihyu8ewWH-_G2Cy8NyE_8g');
+    background-size: cover; /* Ensures the image covers the entire body */
+    background-position: center;
+    background-repeat: no-repeat;
+    background-attachment: fixed; /* Keeps background fixed during scroll if page extends */
+
+    position: relative;
+    z-index: 1;
 }
 
-/* --- Navigation --- */
-.navbar {
-    background-color: rgba(255, 255, 255, 0.95);
-    padding: 1rem 2rem;
-    box-shadow: 0 2px 10px rgba(0,0,0,0.1);
-    position: sticky;
+/* Updated: Background Overlay for Contrast - now slightly darker */
+body::before {
+    content: "";
+    position: absolute;
     top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    /* Darker semi-transparent color for better contrast with transparent containers */
+    background-color: rgba(0, 0, 0, 0.65); /* Increased opacity */
+    z-index: -1;
 }
 
-.container {
+/* ------------------------------------- */
+/* --- GENERAL NAVIGATION STYLES --- */
+/* ------------------------------------- */
+
+.top-nav {
+    position: absolute;
+    top: 0;
+    right: 0;
+    padding: 1.5rem 3rem;
+    z-index: 100; /* Ensure nav is above the overlay */
+}
+
+.nav-links-top {
+    list-style: none;
+    display: flex;
+    gap: 2rem;
+}
+
+.nav-links-top a {
+    text-decoration: none;
+    color: #ffffff; /* White color for visibility */
+    font-weight: 500;
+    font-size: 0.95rem;
+    letter-spacing: 0.5px;
+    transition: color 0.3s ease-in-out;
+}
+
+.nav-links-top a:hover {
+    color: hotpink;
+}
+
+/* Dashboard Navigation (New Style for Dashboards) */
+.dashboard-nav {
+    background-color: #ffffff;
+    padding: 1rem 0;
+    box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+    width: 100%;
+    position: fixed;
+    top: 0;
+    z-index: 1000;
+}
+
+.dashboard-nav .container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 30px;
     display: flex;
     justify-content: space-between;
     align-items: center;
 }
 
-.logo {
-    font-size: 1.5rem;
+.dashboard-nav .logo {
+    font-size: 1.25rem;
     font-weight: bold;
-    color: hotpink;
+    color: #4c6fff;
 }
 
-.nav-links {
+.dashboard-nav .nav-links {
     list-style: none;
     display: flex;
     gap: 1.5rem;
 }
 
-.nav-links a {
+.dashboard-nav .nav-links a {
     text-decoration: none;
-    color: #333;
+    color: #555;
     font-weight: 500;
     transition: color 0.3s;
 }
 
-.nav-links a:hover {
+.dashboard-nav .nav-links a:hover {
     color: hotpink;
 }
 
-/* --- Login Form --- */
-.login-container {
+/* ------------------------------------- */
+/* --- LOGIN/REGISTER FORM STYLES --- */
+/* ------------------------------------- */
+
+/* Wrapper (Main Split Container) - Now fully transparent */
+.wrapper {
+    max-width: 960px;
+    width: 90%;
     display: flex;
+    border-radius: 12px;
+    background-color: transparent; /* Changed to transparent */
+    box-shadow: none; /* Removed box-shadow */
+    min-height: 540px;
+    overflow: hidden;
+    z-index: 10;
+    /* Added a subtle border for definition if needed, adjust color/opacity */
+    border: 1px solid rgba(255, 255, 255, 0.2);
+}
+
+/* Left Side: Log In Container - Now semi-transparent */
+.login-container {
+    width: 50%;
+    padding: 3.5rem;
+    display: flex;
+    flex-direction: column;
     justify-content: center;
     align-items: center;
-    height: calc(100vh - 100px);
-    padding-top: 40px;
+    background-color: rgba(255, 255, 255, 0.15); /* Semi-transparent white */
+    backdrop-filter: blur(5px); /* Frosty glass effect */
+    border-right: 1px solid rgba(255, 255, 255, 0.1); /* Separator line */
+}
+
+.login-container h2 {
+    color: #ffffff; /* Changed to white for better contrast */
+    font-size: 2rem;
+    font-weight: 700;
+    margin-bottom: 2.5rem;
+    text-shadow: 0 2px 4px rgba(0,0,0,0.5); /* Added text shadow for readability */
 }
 
 .login-form {
-    background: rgba(255, 255, 255, 0.5); /* More transparent */
-    backdrop-filter: blur(10px); /* Frosted glass effect */
-    padding: 30px;
-    border-radius: 10px;
-    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.1);
     width: 100%;
-    max-width: 380px;
-    border: 1px solid rgba(255, 255, 255, 0.4);
+    max-width: 320px;
 }
 
-
-.login-form h2 {
+/* Right Side: Gradient Container - Now semi-transparent with gradient */
+.sign-container {
+    width: 50%;
+    padding: 4rem;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
     text-align: center;
-    margin-bottom: 20px;
-    color: #333;
+    /* Adjusted gradient for a more subtle, transparent look */
+    background-image: linear-gradient(to bottom right, rgba(140, 76, 255, 0.3), rgba(76, 111, 255, 0.3)); /* Semi-transparent gradient */
+    backdrop-filter: blur(5px); /* Frosty glass effect */
+    color: white;
+    text-shadow: 0 2px 4px rgba(0,0,0,0.5); /* Added text shadow for readability */
 }
 
+/* Form Groups (Common to all forms) - Adjusting for transparent containers */
 .form-group {
-    margin-bottom: 20px;
+    margin-bottom: 1.25rem;
+    text-align: left;
 }
 
 .form-group label {
-    font-weight: 600;
-    color: #444;
+    display: block;
+    margin-bottom: 5px;
+    font-weight: 500;
+    color: #ffffff; /* Changed to white */
+    font-size: 0.95rem;
 }
 
-.form-group input {
+/* Input/Select Styling (Common to all forms) - Adjusting for transparent containers */
+.form-group input, .form-group select {
     width: 100%;
-    padding: 10px;
-    margin-top: 6px;
-    border: 1px solid #ccc;
-    border-radius: 4px;
+    padding: 0.75rem 1.5rem;
+    border: 1px solid rgba(255, 255, 255, 0.4); /* Lighter border for transparent input */
+    background-color: rgba(255, 255, 255, 0.1); /* Slightly visible input background */
+    border-radius: 30px;
+    outline: none;
+    font-size: 1rem;
+    color: #ffffff; /* Input text white */
+    transition: all 0.3s ease;
 }
 
+.form-group input::placeholder { /* Style placeholder text */
+    color: rgba(255, 255, 255, 0.7);
+}
+
+
+.form-group select {
+    appearance: none;
+    padding-right: 2.5rem;
+    background-color: rgba(255, 255, 255, 0.1);
+    /* Update SVG fill color for dropdown arrow to white */
+    background-image: url("data:image/svg+xml;charset=UTF-8,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 20 20' fill='%23ffffff'%3e%3cpath d='M9.293 12.95l.707.707L15.657 8l-1.414-1.414L10 10.828 5.757 6.586 4.343 8z'/%3e%3c/svg%3e");
+    background-repeat: no-repeat;
+    background-position: right 0.75rem center;
+    background-size: 1.5rem auto;
+}
+
+.form-group input:focus, .form-group select:focus {
+    border-color: hotpink;
+    box-shadow: 0 0 0 3px rgba(255, 105, 180, 0.4); /* Stronger shadow on focus */
+    background-color: rgba(255, 255, 255, 0.2); /* Slightly brighter on focus */
+}
+
+/* Forgot Password Link Styling - Updated for visibility */
 .form-actions {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    font-size: 0.9em;
-    margin-bottom: 20px;
+    width: 100%;
+    max-width: 320px;
+    text-align: right;
+    margin-bottom: 2rem;
+    font-size: 0.9rem;
 }
 
 .form-actions a {
-    color: hotpink;
+    color: #eeeeee; /* Lighter color */
     text-decoration: none;
+    transition: color 0.3s;
+    text-shadow: 0 1px 2px rgba(0,0,0,0.5); /* Added text shadow */
+}
+
+.form-actions a:hover {
+    color: hotpink;
+    text-decoration: underline;
+}
+
+/* LOG IN Button */
+.sign-in-button {
+    width: 100%;
+    padding: 0.85rem 1.5rem;
+    background-image: linear-gradient(to right, #ff69b4, #ff8cdd);
+    color: white;
+    border: none;
+    border-radius: 30px;
+    font-size: 1.05rem;
+    font-weight: 600;
+    letter-spacing: 0.5px;
+    cursor: pointer;
+    transition: transform 0.2s, box-shadow 0.2s;
+    max-width: 180px;
+    display: block;
+    margin: 0 auto;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3); /* Ensure button shadow pops */
+}
+
+.sign-in-button:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 15px rgba(255, 105, 180, 0.6); /* Stronger hover shadow */
+}
+
+/* SIGN UP Button (Right Container) */
+.sign-up-button {
+    text-decoration: none;
+    padding: 0.75rem 2.5rem;
+    background-color: rgba(255, 255, 255, 0.2); /* Semi-transparent white */
+    color: white; /* Changed to white */
+    border: 1px solid rgba(255, 255, 255, 0.5); /* Subtle white border */
+    border-radius: 30px;
+    font-size: 1rem;
+    font-weight: 600;
+    letter-spacing: 0.5px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.3); /* Added shadow for depth */
+}
+
+.sign-up-button:hover {
+    background-color: rgba(255, 255, 255, 0.4); /* More opaque on hover */
+    color: #ffffff; /* Stays white */
+    transform: translateY(-1px);
+    box-shadow: 0 4px 12px rgba(0,0,0,0.4); /* Stronger hover shadow */
+}
+
+/* Register/Forgot Password Container (Standalone Forms) */
+.register-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    padding: 3rem;
+    /* Ensure standalone forms also have some background / blur effect */
+    background-color: rgba(255, 255, 255, 0.15); /* Semi-transparent white */
+    backdrop-filter: blur(5px);
+    z-index: 10;
+    border-radius: 12px; /* Match wrapper border-radius */
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    box-shadow: 0 20px 60px rgba(0, 0, 0, 0.4);
+}
+
+.register-form {
+    background: transparent; /* Changed to transparent */
+    padding: 3rem;
+    border-radius: 12px;
+    box-shadow: none; /* Removed box-shadow */
+    width: 100%;
+    max-width: 480px;
+    text-align: center;
+}
+
+.register-form h2 {
+    color: hotpink; /* Keep hotpink for distinction */
+    font-size: 2rem;
+    margin-bottom: 2rem;
+    text-shadow: 0 2px 4px rgba(0,0,0,0.5); /* Added text shadow */
+}
+
+.register-button {
+    width: 100%;
+    padding: 0.9rem;
+    background-image: linear-gradient(to right, #ff69b4, #ff8cdd);
+    color: white;
+    border: none;
+    border-radius: 30px;
+    font-size: 1.1rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: transform 0.2s, box-shadow 0.2s;
+    margin-top: 1.5rem;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3); /* Ensure button shadow pops */
+}
+
+.register-button:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 15px rgba(255, 105, 180, 0.6); /* Stronger hover shadow */
 }
 
 .form-links {
     text-align: center;
-    font-size: 0.9em;
+    font-size: 0.95rem;
+    margin-top: 1.5rem;
 }
 
 .form-links a {
     color: hotpink;
     text-decoration: none;
+    font-weight: 600;
+    text-shadow: 0 1px 2px rgba(0,0,0,0.5); /* Added text shadow */
 }
 
-.login-button {
+.form-links a:hover {
+    text-decoration: underline;
+}
+
+/* ------------------------------------- */
+/* --- FLASH MESSAGE STYLES (CRITICAL) --- */
+/* ------------------------------------- */
+
+.flash-messages {
     width: 100%;
-    padding: 10px;
-    background-color: hotpink;
-    color: white;
-    border: none;
-    border-radius: 4px;
-    font-size: 1rem;
-    font-weight: bold;
-    cursor: pointer;
-    transition: background-color 0.3s;
+    margin-bottom: 20px;
+    z-index: 100; /* Ensure flash messages are on top */
 }
 
-.login-button:hover {
-    background-color: #ff5cad;
+.flash-messages p {
+    padding: 10px 20px;
+    margin-bottom: 10px;
+    border-radius: 6px;
+    font-weight: 500;
+    text-align: center;
+    font-size: 0.95rem;
+    line-height: 1.4;
+    color: #333; /* Default text color, will be overridden by specific classes */
+    background-color: rgba(255, 255, 255, 0.8); /* Semi-transparent background for readability */
+    border: 1px solid rgba(0,0,0,0.1);
 }
 
-/* --- Content Pages (About & Contact) --- */
-.content-container {
+.success {
+    background-color: rgba(212, 237, 218, 0.9); /* Slightly more opaque */
+    color: #155724;
+    border: 1px solid #c3e6cb;
+}
+
+.warning {
+    background-color: rgba(255, 243, 205, 0.9);
+    color: #856404;
+    border: 1px solid #ffeeba;
+}
+
+.danger {
+    background-color: rgba(248, 215, 218, 0.9);
+    color: #721c24;
+    border: 1px solid #f5c6cb;
+}
+
+/* ------------------------------------- */
+/* --- CONTENT/INFO PAGE STYLES --- */
+/* ------------------------------------- */
+
+.info-page-container {
     display: flex;
     justify-content: center;
     align-items: center;
-    height: calc(100vh - 100px);
-    padding: 20px;
+    height: 100vh;
+    padding: 4rem;
 }
 
 .info-card {
-    background: rgba(255, 255, 255, 0.95);
-    padding: 40px;
-    border-radius: 10px;
-    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.15);
+    background: rgba(255, 255, 255, 0.15); /* Semi-transparent background */
+    backdrop-filter: blur(5px);
+    padding: 3rem;
+    border-radius: 12px;
+    box-shadow: 0 5px 20px rgba(0, 0, 0, 0.3); /* Darker shadow */
     max-width: 700px;
     width: 90%;
     text-align: center;
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    color: #ffffff; /* White text for contrast */
+    text-shadow: 0 1px 3px rgba(0,0,0,0.5); /* Text shadow for readability */
 }
 
 .info-card h2 {
-    color: hotpink;
-    margin-bottom: 15px;
+    color: #4c6fff; /* Blue heading (stands out well) */
+    margin-bottom: 1.5rem;
+    font-size: 2rem;
 }
 
 .info-card p {
-    color: #333;
-    margin-bottom: 15px;
+    color: #eeeeee; /* Lighter white for paragraphs */
+    margin-bottom: 1.2rem;
     line-height: 1.6;
 }
 
 .contact-info {
     list-style: none;
     padding: 0;
-    margin: 15px 0;
+    margin: 1.5rem 0;
+    text-align: left;
+    display: inline-block;
 }
 
 .contact-info li {
-    margin-bottom: 10px;
+    margin-bottom: 0.8rem;
     font-weight: 500;
+    color: #ffffff; /* White for contact list items */
 }
 
-.login-form p {
-    font-size: 0.95em;
-    line-height: 1.5;
-}
+/* ------------------------------------- */
+/* --- DASHBOARD STYLES --- */
+/* ------------------------------------- */
 
-.login-form a:hover {
-    text-decoration: underline;
-}
-
-.content-container {
-    max-width: 900px;
-    margin: 40px auto;
+.dashboard-wrapper {
+    max-width: 1200px;
+    width: 90%;
+    margin: 80px auto 40px;
     padding: 30px;
-    background: #fff;
+    background: rgba(255, 255, 255, 0.9); /* Slightly transparent white for dashboard */
     border-radius: 12px;
-    box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+    box-shadow: 0 4px 20px rgba(0,0,0,0.15);
+    backdrop-filter: blur(3px); /* Subtle blur for dashboard */
+}
+
+.dashboard-wrapper h2 {
+    color: #333;
+    margin-bottom: 5px;
+}
+
+.dashboard-wrapper p {
+    color: #777;
+    margin-bottom: 25px;
+    font-size: 1.05rem;
 }
 
 .dashboard-section {
     margin-top: 30px;
+    padding: 20px;
+    border: 1px solid #e0e0e0;
+    border-radius: 8px;
 }
 
 .dashboard-section h3 {
-    color: #333;
-    margin-bottom: 10px;
+    color: #4c6fff;
+    margin-bottom: 15px;
+    border-bottom: 2px solid #f0f2f5;
+    padding-bottom: 10px;
 }
 
+.dashboard-section ul {
+    list-style: none;
+    padding: 0;
+}
+
+.dashboard-section li {
+    padding: 8px 0;
+    color: #333;
+    font-size: 0.95rem;
+}
+
+/* Dashboard Buttons */
 .btn {
     padding: 10px 20px;
-    background: #007bff;
-    color: #fff;
     border: none;
-    border-radius: 8px;
-    margin-right: 10px;
+    border-radius: 6px;
+    font-weight: 600;
     cursor: pointer;
+    margin-right: 10px;
+    transition: transform 0.2s, box-shadow 0.2s;
 }
 
 .btn:hover {
-    background: #0056b3;
+    transform: translateY(-1px);
+    box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+}
+
+.primary-btn {
+    background-color: hotpink;
+    color: white;
+}
+
+.secondary-btn {
+    background-color: #f0f2f5;
+    color: #333;
+    border: 1px solid #ccc;
+}
+
+.tertiary-btn {
+    background-color: #4c6fff;
+    color: white;
+}
+
+
+.check-icon {
+    margin-right: 8px;
+    color: #4c6fff;
+    font-weight: 700;
+}
+
+/* Style for active status */
+.status-active {
+    color: #008000;
+    font-weight: 600;
+}
+
+.dashboard-section ul {
+    list-style: none;
+    padding-left: 0;
 }

@@ -2,53 +2,54 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>LOAN SYSTEM <3</title>
+    <title>LOAN SYSTEM - Log In</title>
     <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
 </head>
 <body>
 
-    <nav class="navbar">
-        <div class="container">
-            <div class="logo">LOAN SYSTEM</div>
-            <ul class="nav-links">
-                <li><a href="{{ url_for('home') }}">HOME</a></li>
-                <li><a href="{{ url_for('about') }}">ABOUT US</a></li>
-                <li><a href="{{ url_for('contact') }}">CONTACT</a></li>
-                <li><a href="{{ url_for('logout') }}">LOGOUT</a></li>
-            </ul>
-        </div>
+    <nav class="top-nav">
+        <ul class="nav-links-top">
+            <li><a href="{{ url_for('home') }}">HOME</a></li>
+            <li><a href="{{ url_for('about') }}">ABOUT US</a></li>
+            <li><a href="{{ url_for('contact') }}">CONTACT</a></li>
+        </ul>
     </nav>
 
-    <!-- Login Form -->
+    <div class="wrapper">
+    {% with messages = get_flashed_messages(with_categories=true) %}
+        {% if messages %}
+            <div class="flash-messages">
+                {% for category, message in messages %}
+                    <p class="{{ category }}">{{ message }}</p>
+                {% endfor %}
+            </div>
+        {% endif %}
+    {% endwith %}
     <div class="login-container">
-        <form class="login-form">
-            <h2>Log In</h2>
+        <h2>LOG IN</h2>
 
-            <div class="form-group">
-                <label for="email">Email:</label>
-                <input type="email" id="email" name="email" required placeholder="Enter your email">
-            </div>
-
-            <div class="form-group">
-                <label for="password">Password:</label>
-                <input type="password" id="password" name="password" required placeholder="Enter your password">
-            </div>
-
-            <div class="form-actions">
-                <div>
-                    <input type="checkbox" id="remember" name="remember">
-                    <label for="remember">Remember me</label>
+            <form class="login-form">
+                <div class="form-group">
+                    <input type="email" id="email" name="email" required placeholder="Email">
                 </div>
-                <a href="{{ url_for('forgot_password') }}">Forgot password?</a>
-            </div>
 
-            <button type="submit" class="login-button">LOG IN</button>
+                <div class="form-group">
+                    <input type="password" id="password" name="password" required placeholder="Password">
+                </div>
 
-            <div class="form-links">
-                Don't have an account?
-                <a href="{{ url_for('register') }}">Register</a>
-            </div>
-        </form>
+                <div class="form-actions">
+                    <a href="{{ url_for('forgot_password') }}">Forgot password?</a>
+                </div>
+
+                <button type="submit" class="sign-in-button">LOG IN</button>
+            </form>
+        </div>
+
+        <div class="sign-container">
+            <h1>WELCOME!</h1>
+            <p>Register here if you don't have an account.</p>
+            <a href="{{ url_for('register') }}" class="sign-up-button">SIGN UP</a>
+        </div>
     </div>
 </body>
 </html>

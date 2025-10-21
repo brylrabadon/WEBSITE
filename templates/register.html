@@ -7,21 +7,26 @@
 </head>
 <body>
 
-    <nav class="navbar">
-        <div class="container">
-            <div class="logo">LOAN SYSTEM</div>
-            <ul class="nav-links">
-                <li><a href="{{ url_for('home') }}">HOME</a></li>
-                <li><a href="{{ url_for('about') }}">ABOUT US</a></li>
-                <li><a href="{{ url_for('contact') }}">CONTACT</a></li>
-                <li><a href="{{ url_for('logout') }}">LOGOUT</a></li>
-            </ul>
-        </div>
+    <nav class="top-nav">
+        <ul class="nav-links-top">
+            <li><a href="{{ url_for('home') }}">HOME</a></li>
+            <li><a href="{{ url_for('about') }}">ABOUT US</a></li>
+            <li><a href="{{ url_for('contact') }}">CONTACT</a></li>
+        </ul>
     </nav>
 
-    <div class="login-container">
-        <form class="login-form" method="POST" action="{{ url_for('register') }}">
-            <h2>Create Account</h2>
+    <div class="register-container">
+    {% with messages = get_flashed_messages(with_categories=true) %}
+        {% if messages %}
+            <div class="flash-messages">
+                {% for category, message in messages %}
+                    <p class="{{ category }}">{{ message }}</p>
+                {% endfor %}
+            </div>
+        {% endif %}
+    {% endwith %}
+    <form class="register-form" method="POST" action="{{ url_for('register') }}">
+        <h2>Create Account</h2>
 
             {% if error %}
                 <p style="color:red; text-align:center;">{{ error }}</p>
@@ -55,7 +60,7 @@
                 </select>
             </div>
 
-            <button type="submit" class="login-button">REGISTER</button>
+            <button type="submit" class="register-button">REGISTER</button>
 
             <div class="form-links">
                 Already have an account?
