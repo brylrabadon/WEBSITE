@@ -1,0 +1,108 @@
+{% extends "base.html" %}
+{% block title %}Admin Dashboard{% endblock %}
+
+{% block content %}
+<div class="container mt-5">
+    <div class="row">
+        <div class="col-12">
+            <h1 class="mb-4">Administrator Control Panel</h1>
+            <p class="lead">Manage user accounts and pending loan applications.</p>
+
+            {% with messages = get_flashed_messages(with_categories=true) %}
+                {% if messages %}
+                    {% for category, message in messages %}
+                        <div class="alert alert-{{ category }} alert-dismissible fade show" role="alert">
+                            {{ message }}
+                            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                        </div>
+                    {% endfor %}
+                {% endif %}
+            {% endwith %}
+        </div>
+    </div>
+
+    <div class="row mt-5">
+        <div class="col-12">
+            <h2>Pending User Accounts</h2>
+            <p>Users below are registered but not yet approved for login (<code>is_approved = False</code>).</p>
+            <table class="table table-striped table-hover">
+                <thead>
+                    <tr>
+                        <th>ID</th>
+                        <th>Name</th>
+                        <th>Email</th>
+                        <th>Role</th>
+                        <th>Status</th>
+                        <th>Action</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for user in users %}
+                        {% if not user.is_approved %}
+                            <tr class="table-warning">
+                                <td>{{ user.id }}</td>
+                                <td>{{ user.fullname }}</td>
+                                <td>{{ user.email }}</td>
+                                <td>{{ user.role }}</td>
+                                <td><span class="badge bg-danger">Pending</span></td>
+                                <td>
+                                    <form method="POST" action="{{ url_for('approve_user', user_id=user.id) }}" style="display:inline;">
+                                        <button type="submit" class="btn btn-success btn-sm">Approve</button>
+                                    </form>
+                                </td>
+                            </tr>
+                        {% endif %}
+                    {% endfor %}
+
+                    {% if not users|selectattr('is_approved', 'equalto', False)|list %}
+                        <tr>
+                            <td colspan="6" class="text-center">🎉 All accounts are currently approved.</td>
+                        </tr>
+                    {% endif %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <div class="row mt-5">
+        <div class="col-12">
+            <h2>Pending Loan Applications</h2>
+            <p>Loan applications awaiting review (<code>status = Pending</code>).</p>
+            <table class="table table-striped table-hover">
+                <thead>
+                    <tr>
+                        <th>Loan ID</th>
+                        <th>Borrower</th>
+                        <th>Amount</th>
+                        <th>Term (Months)</th>
+                        <th>Application Date</th>
+                        <th>Action</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for loan in pending_loans %}
+                        <tr class="table-info">
+                            <td>{{ loan.id }}</td>
+                            <td>{{ loan.borrower.fullname }} ({{ loan.borrower.email }})</td>
+                            <td>₱ {{ "{:,.2f}".format(loan.amount) }}</td>
+                            <td>{{ loan.term_months }}</td>
+                            <td>{{ loan.application_date.strftime('%Y-%m-%d') }}</td>
+                            <td>
+                                <form method="POST" action="{{ url_for('approve_loan', loan_id=loan.id) }}" style="display:inline;">
+                                    <button type="submit" class="btn btn-primary btn-sm">Approve Loan</button>
+                                </form>
+                            </td>
+                        </tr>
+                    {% endfor %}
+
+                    {% if not pending_loans %}
+                        <tr>
+                            <td colspan="6" class="text-center">✅ No loan applications are currently pending.</td>
+                        </tr>
+                    {% endif %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+{% endblock %}

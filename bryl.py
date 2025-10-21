@@ -1,9 +1,13 @@
+# bryl.py (FINAL VERIFIED VERSION)
+
 from flask import Flask, render_template, request, redirect, session, url_for, flash
-from werkzeug.security import generate_password_hash, check_password_hash
 from flask_sqlalchemy import SQLAlchemy
 import os
+# Imports models from the 'models' directory (assuming structure: bryl.py, models/db.py, models/user.py, etc.)
+from models.db import db
+from models.user import User, UserModel
+from models.post import Post, PostModel, LoanModel
 
-# --- APP CONFIGURATION ---
 bryl = Flask(__name__)
 bryl.secret_key = "bryl_secret_key"
 
@@ -11,27 +15,13 @@ bryl.secret_key = "bryl_secret_key"
 bryl.config["SQLALCHEMY_DATABASE_URI"] = "sqlite:///loansystem.db"
 bryl.config["SQLALCHEMY_TRACK_MODIFICATIONS"] = False
 
-db = SQLAlchemy(bryl)
+# Initialize db *with* the app instance
+db.init_app(bryl)
 
+# Initialize the User and Post repositories
+user_repo = User(None)
+post_repo = Post(None)
 
-# --- DATABASE MODELS ---
-class User(db.Model):
-    id = db.Column(db.Integer, primary_key=True)
-    fullname = db.Column(db.String(150), nullable=False)
-    email = db.Column(db.String(150), unique=True, nullable=False)
-    password_hash = db.Column(db.String(256), nullable=False)
-    role = db.Column(db.String(50), nullable=False)
-    is_approved = db.Column(db.Boolean, default=False, nullable=False)
-
-    def set_password(self, password):
-        self.password_hash = generate_password_hash(password)
-
-    def check_password(self, password):
-        return check_password_hash(self.password_hash, password)
-
-
-# IMPORTANT: You must delete your old loansystem.db file and rerun
-# bryl.py once to apply this schema change.
 
 # --- ROUTES ---
 @bryl.route("/")
@@ -63,40 +53,46 @@ def register():
         if password != confirm:
             return render_template("register.html", error="Passwords do not match!")
 
-        user = User.query.filter_by(email=email).first()
-        if user:
+        if user_repo.get_user_by_email(email):
             return render_template("register.html", error="Email already exists!")
 
-        # Save new user (is_approved defaults to False)
-        new_user = User(fullname=fullname, email=email, role=role)
-        new_user.set_password(password)
-        db.session.add(new_user)
-        db.session.commit()
+        # Create user (is_approved=False by default)
+        success = user_repo.create_user(fullname, email, password, role)
 
-        # New logic: Flash message and redirect to a waiting page (home in this case)
-        flash("Registration successful! Your account is pending admin approval before you can log in.", "success")
-        return redirect(url_for("home"))
+        if success:
+            flash("Registration successful! Your account is pending admin approval before you can log in.", "success")
+            return redirect(url_for("home"))
+        else:
+            flash("Registration failed due to a database error.", "danger")
+            return redirect(url_for("register"))
 
     return render_template("register.html")
 
 
 @bryl.route("/login", methods=["POST"])
 def login():
+    # --- Code to retrieve user data and object ---
     email = request.form["email"]
     password = request.form["password"]
-
-    user = User.query.filter_by(email=email).first()
+    user = user_repo.get_user_by_email(email)
+    # ---------------------------------------------
 
     if user and user.check_password(password):
-        # NEW CHECK: Verify if the user has been approved
+        # 1. Check for approval
         if not user.is_approved:
             flash("Your account is pending administrator approval. Please wait.", "warning")
             return redirect(url_for("home"))
 
-        # If approved, proceed with login
+        # 2. Log in successful
         session["email"] = user.email
         session["role"] = user.role
         session["fullname"] = user.fullname
+
+        # 3. Check role and redirect
+        # IMPORTANT: Use 'Admin' (capital A) because that is how it is set in register.html
+        if user.role == 'Admin':
+            return redirect(url_for('admin_dashboard'))
+
         return redirect(url_for("dashboard"))
     else:
         flash("Invalid email or password.", "danger")
@@ -105,15 +101,79 @@ def login():
 
 @bryl.route('/dashboard')
 def dashboard():
+    # **THIS SECTION WAS RE-ADDED/VERIFIED**
     if "email" not in session:
         return redirect(url_for('home'))
 
     fullname = session.get('fullname', 'User')
     role = session.get('role', 'Guest')
 
-    # Renders the unified dashboard template based on the role
-    return render_template("dashboard.html", fullname=fullname, role=role)
+    # Fetch all posts (This requires post.py to have app_context fixes)
+    all_posts = post_repo.get_all_posts()
 
+    return render_template("dashboard.html", fullname=fullname, role=role, all_posts=all_posts)
+
+
+# --- ADMIN ROUTES ---
+
+# 1. Admin Dashboard Route
+@bryl.route('/admin')
+def admin_dashboard():
+    # Role check: Ensure only 'Admin' role can view this page
+    # IMPORTANT: Use 'Admin' (capital A) for comparison to match register.html
+    if 'role' not in session or session['role'] != 'Admin':
+        flash("Access denied. You do not have administrator privileges.", "danger")
+        return redirect(url_for('home'))
+
+    all_users = user_repo.get_all_users()
+
+    with bryl.app_context():
+        # Fetch all pending loans
+        pending_loans = LoanModel.query.filter_by(status='Pending').all()
+
+    return render_template("admin_dashboard.html", users=all_users, pending_loans=pending_loans)
+
+
+# 2. Approve User Account Route
+@bryl.route('/admin/approve_user/<int:user_id>', methods=['POST'])
+def approve_user(user_id):
+    # IMPORTANT: Use 'Admin' (capital A) for comparison
+    if 'role' not in session or session['role'] != 'Admin':
+        flash("Permission denied.", "danger")
+        return redirect(url_for('dashboard'))
+
+    success = user_repo.update_user(user_id, is_approved=True)
+
+    if success:
+        flash(f"Account for User ID {user_id} has been approved. They can now log in.", "success")
+    else:
+        flash(f"Failed to approve user ID {user_id}. Check logs.", "danger")
+
+    return redirect(url_for('admin_dashboard'))
+
+
+# 3. Approve Loan Route
+@bryl.route('/admin/approve_loan/<int:loan_id>', methods=['POST'])
+def approve_loan(loan_id):
+    # IMPORTANT: Use 'Admin' (capital A) for comparison
+    if 'role' not in session or session['role'] != 'Admin':
+        flash("Permission denied.", "danger")
+        return redirect(url_for('dashboard'))
+
+    with bryl.app_context():
+        loan = LoanModel.query.get(loan_id)
+        if loan:
+            loan.status = 'Approved'
+            try:
+                db.session.commit()
+                flash(f"Loan ID {loan_id} has been approved.", "success")
+            except Exception:
+                db.session.rollback()
+                flash(f"Failed to approve loan ID {loan_id}.", "danger")
+        else:
+            flash("Loan not found.", "danger")
+
+    return redirect(url_for('admin_dashboard'))
 
 @bryl.route("/forgot_password")
 def forgot_password():
