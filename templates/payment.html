@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Make Payment | Loan System</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+    <nav class="dashboard-nav">
+        <div class="container">
+            <div class="logo">LOAN SYSTEM - BORROWER</div>
+            <ul class="nav-links">
+                <li><a href="{{ url_for('dashboard') }}">DASHBOARD</a></li>
+                <li><a href="{{ url_for('about') }}">ABOUT</a></li>
+                <li><a href="{{ url_for('contact') }}">CONTACT</a></li>
+                <li><a href="{{ url_for('logout') }}">LOGOUT</a></li>
+            </ul>
+        </div>
+    </nav>
+
+    {% with messages = get_flashed_messages(with_categories=true) %}
+        {% if messages %}
+            <div class="flash-messages" style="position: fixed; top: 70px; width: 100%; max-width: 1200px; z-index: 999; margin: 0 auto; padding: 0 30px;">
+            {% for category, message in messages %}
+                <p class="{{ category }}">{{ message }}</p>
+            {% endfor %}
+            </div>
+        {% endif %}
+    {% endwith %}
+
+    <div class="loan-application-container">
+        <div class="form-card">
+            <h2>Make a Payment</h2>
+
+            {% if approved_loans %}
+            <form method="POST" action="{{ url_for('payment') }}">
+
+                <div class="form-group">
+                    <label for="loan_id">Select Approved Loan:</label>
+                    <select name="loan_id" id="loan_id" required>
+                        {% for loan in approved_loans %}
+                        <option value="{{ loan.id }}">
+                            Loan #{{ loan.id }} | Amount: ₱{{ "{:,.2f}".format(loan.amount) }} | Term: {{ loan.term_months }} months
+                        </option>
+                        {% endfor %}
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label for="payment_amount">Payment Amount (₱):</label>
+                    <input type="number" id="payment_amount" name="payment_amount" step="0.01" required placeholder="e.g., 500.00">
+                </div>
+
+                <div class="form-group">
+                    <label for="payment_method">Payment Method:</label>
+                    <select name="payment_method" id="payment_method" required>
+                        <option value="Bank Transfer">Bank Transfer</option>
+                        <option value="Gcash">Gcash</option>
+                        <option value="Paymaya">Paymaya</option>
+                        <option value="Cash Deposit">Cash Deposit</option>
+                    </select>
+                </div>
+
+                <button type="submit" class="loan-submit-button">Submit Payment Request</button>
+            </form>
+
+            <div class="form-links">
+                <a href="{{ url_for('dashboard') }}">Back to Dashboard</a>
+            </div>
+
+            {% else %}
+            <p>You currently do not have any **Approved** loans to make a payment on. </p>
+            <p>Please apply for a loan or wait for an administrator to approve your existing application.</p>
+            <div class="form-links">
+                <a href="{{ url_for('apply_loan') }}">Apply for a Loan</a>
+            </div>
+            {% endif %}
+
+        </div>
+    </div>
+</body>
+</html>

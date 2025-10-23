@@ -19,6 +19,16 @@
         </div>
     </nav>
 
+    {% with messages = get_flashed_messages(with_categories=true) %}
+        {% if messages %}
+            <div class="flash-messages" style="position: fixed; top: 70px; width: 100%; max-width: 1200px; z-index: 999; margin: 0 auto; padding: 0 30px;">
+            {% for category, message in messages %}
+                <p class="{{ category }}">{{ message }}</p>
+            {% endfor %}
+            </div>
+        {% endif %}
+    {% endwith %}
+
     <div class="dashboard-wrapper">
         <h2>Welcome, {{ fullname }}!</h2>
         <p>You are logged in as <strong>{{ role }}</strong>.</p>
@@ -38,39 +48,88 @@
 
             <div class="dashboard-section">
                 <h3>Quick Actions</h3>
-                <button class="btn primary-btn">Add New Loan</button>
-                <button class="btn secondary-btn">View Borrowers</button>
-                <button class="btn tertiary-btn">Generate Report</button>
+                <a href="{{ url_for('admin_dashboard') }}" class="btn primary-btn">Go to Admin Panel</a>
+                <a href="#" class="btn secondary-btn">View Borrowers</a>
+                <a href="#" class="btn tertiary-btn">Generate Report</a>
             </div>
 
         {% elif role == 'Borrower' %}
 
-            <div class="dashboard-section">
-                <h3>Your Loan Information</h3>
-                <p>Overview of your current or most recent loan details.</p>
-                <ul>
-                    <li>Loan ID: <strong>#12345</strong></li>
-                    <li>Amount: <strong>₱25,000</strong></li>
-                    <li>Status: <strong class="status-active">Active</strong></li>
-                    <li>Next Payment Due: <strong>Oct 30, 2025</strong></li>
-                </ul>
-            </div>
+    <div class="dashboard-section">
+        <h3>Your Current Loans & Applications</h3>
+        <p>This table shows loans that are **Pending** approval or **Approved** with a remaining balance. Loans that are fully paid are moved to Payment History.</p>
 
-            <div class="dashboard-section">
-                <h3>Quick Actions</h3>
-                <button class="btn primary-btn">Apply for Loan</button>
-                <button class="btn secondary-btn">View Payment History</button>
-                <button class="btn tertiary-btn">Update Profile</button>
-            </div>
-
+        {% if user_loans %}
+            <table>
+                <thead>
+                    <tr>
+                        <th>Loan ID</th>
+                        <th>Amount</th>
+                        <th>Current Balance</th> <th>Term (Months)</th>
+                        <th>Status</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for loan in user_loans %}
+                    <tr>
+                        <td><strong>#{{ loan.id }}</strong></td>
+                        <td>₱{{ "{:,.2f}".format(loan.amount) }}</td>
+                        <td>₱{{ "{:,.2f}".format(loan.balance) }}</td> <td>{{ loan.term_months }}</td>
+                        <td>
+                            <strong class="status-{{ loan.status | lower }}">
+                                {{ loan.status }}
+                            </strong>
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
         {% else %}
-            <div class="dashboard-section">
-                <h3>Access Denied</h3>
-                <p>Your account role is not recognized. Please contact support.</p>
-            </div>
+            <p>You have no current active or pending loan applications.</p>
         {% endif %}
-
     </div>
 
-</body>
+    <div class="dashboard-section">
+        <h3>Payment History</h3>
+        <p>These are the payments you have made that have been **Approved** by the administrator.</p>
+
+        {% if user_payments %}
+            <table>
+                <thead>
+                    <tr>
+                        <th>Payment ID</th>
+                        <th>Loan ID</th>
+                        <th>Amount Paid</th>
+                        <th>Method</th>
+                        <th>Date Paid</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for payment in user_payments %}
+                    <tr>
+                        <td>#{{ payment.id }}</td>
+                        <td><strong>#{{ payment.loan_id }}</strong></td>
+                        <td>₱{{ "{:,.2f}".format(payment.amount) }}</td>
+                        <td>{{ payment.method }}</td>
+                        <td>{{ payment.payment_date.strftime('%Y-%m-%d %I:%M %p') }}</td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        {% else %}
+            <p>No approved payment records found.</p>
+        {% endif %}
+    </div>
+
+    <div class="dashboard-section">
+        <h3>Quick Actions</h3>
+        <a href="{{ url_for('apply_loan') }}" class="btn primary-btn">Apply for Loan</a>
+        <a href="{{ url_for('payment') }}" class="btn secondary-btn">Make a Payment</a>
+        <a href="{{ url_for('update_profile') }}" class="btn tertiary-btn">Update Profile</a>
+    </div>
+
+{% endif %}
+
+    </div>
+  </body>
 </html>

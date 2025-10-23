@@ -7,6 +7,18 @@
 </head>
 <body>
 
+    <div class="flash-message-container">
+        {% with messages = get_flashed_messages(with_categories=true) %}
+            {% if messages %}
+                <div class="flash-messages">
+                    {% for category, message in messages %}
+                        <div class="{{ category }}">{{ message }}</div>
+                    {% endfor %}
+                </div>
+            {% endif %}
+        {% endwith %}
+    </div>
+
     <nav class="top-nav">
         <ul class="nav-links-top">
             <li><a href="{{ url_for('home') }}">HOME</a></li>
@@ -16,17 +28,8 @@
     </nav>
 
     <div class="register-container">
-    {% with messages = get_flashed_messages(with_categories=true) %}
-        {% if messages %}
-            <div class="flash-messages">
-                {% for category, message in messages %}
-                    <p class="{{ category }}">{{ message }}</p>
-                {% endfor %}
-            </div>
-        {% endif %}
-    {% endwith %}
-    <form class="register-form" method="POST" action="{{ url_for('register') }}">
-        <h2>Create Account</h2>
+        <form class="register-form" method="POST" action="{{ url_for('register') }}">
+            <h2>Create Account</h2>
 
             {% if error %}
                 <p style="color:red; text-align:center;">{{ error }}</p>

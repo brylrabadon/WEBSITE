@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Apply for Loan</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+    <nav class="dashboard-nav">
+        </nav>
+
+    <div class="loan-application-container">
+
+        {% with messages = get_flashed_messages(with_categories=true) %}
+          {% if messages %}
+            <div class="flash-messages">
+            {% for category, message in messages %}
+              <p class="{{ category }}">{{ message }}</p>
+            {% endfor %}
+            </div>
+          {% endif %}
+        {% endwith %}
+
+        <div class="form-card">
+            <h2>Apply for Loan</h2>
+
+            <form action="{{ url_for('apply_loan') }}" method="POST">
+
+                <div class="form-group">
+                    <label for="amount">Loan Amount (PHP):</label>
+                    <input type="number" step="0.01" id="amount" name="amount" required min="1000">
+                </div>
+
+                <div class="form-group">
+                    <label for="interest_rate">Annual Interest Rate (%):</label>
+                    <input type="number" step="0.01" id="interest_rate" name="interest_rate" required min="0.1" max="100">
+                </div>
+
+                <div class="form-group">
+                    <label for="term_months">Loan Term (Months):</label>
+                    <input type="number" id="term_months" name="term_months" required min="6" max="120">
+                </div>
+
+                <button type="submit" class="loan-submit-button">Submit Application</button>
+                <div class="form-links">
+                    <a href="{{ url_for('dashboard') }}" class="secondary-btn btn" style="margin-top: 15px;">Cancel</a>
+                </div>
+            </form>
+        </div>
+    </div>
+</body>
+</html>

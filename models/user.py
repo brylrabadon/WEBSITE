@@ -36,14 +36,14 @@ class UserModel(db.Model):
 
 
 # -----------------------------------------------------------
-# 2. Repository Class (All DB operations wrapped in app_context)
+# 2. Repository Class (All methods fixed to use app_context)
 # -----------------------------------------------------------
 class User:
     def __init__(self, db_connection):
         self.db = db_connection
 
-    def create_user(self, fullname, email, password, role="user"):
-        new_user = UserModel(fullname=fullname, email=email, role=role)
+    def create_user(self, fullname, email, password, role):
+        new_user = UserModel(fullname=fullname, email=email, role=role, is_approved=False)
         new_user.set_password(password)
 
         with current_app.app_context(): # FIX: Added app_context
@@ -56,13 +56,13 @@ class User:
                 db.session.rollback()
                 return False
 
-    def get_user_by_id(self, user_id):
-        with current_app.app_context(): # FIX: Added app_context
-            return UserModel.query.get(user_id)
-
     def get_user_by_email(self, email):
         with current_app.app_context(): # FIX: Added app_context
             return UserModel.query.filter_by(email=email).first()
+
+    def get_user_by_id(self, user_id):
+        with current_app.app_context(): # FIX: Added app_context
+            return UserModel.query.get(user_id)
 
     def get_all_users(self):
         with current_app.app_context(): # FIX: Added app_context
@@ -74,7 +74,6 @@ class User:
             if not user: return False
 
             updated = False
-            # ... (rest of the update logic)
             if fullname is not None:
                 user.fullname = fullname
                 updated = True

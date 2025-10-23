@@ -1,0 +1,42 @@
+{% include 'base.html' %}
+{% block content %}
+<div class="admin-view-container">
+    <h2>All Payment Transactions</h2>
+    <a href="{{ url_for('admin_dashboard') }}" class="back-link">&larr; Back to Dashboard</a>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+
+
+    {% if all_payments %}
+        <table class="detail-table">
+            <thead>
+                <tr>
+                    <th>Payment ID</th>
+                    <th>Loan ID</th>
+                    <th>Borrower</th>
+                    <th>Amount Paid</th>
+                    <th>Method</th>
+                    <th>Status</th>
+                    <th>Payment Date</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for payment in all_payments %}
+                <tr>
+                    <td>{{ payment.id }}</td>
+                    <td>{{ payment.loan_id }}</td>
+                    <td>{{ payment.borrower.fullname }}</td>
+                    <td>₱{{ '{:,.2f}'.format(payment.amount) }}</td>
+                    <td>{{ payment.method }}</td>
+                    <td class="status-{{ payment.status|lower }}">
+                        {{ payment.status }}
+                    </td>
+                    <td>{{ payment.payment_date.strftime('%Y-%m-%d') }}</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    {% else %}
+        <p class="no-data">No payment transactions found in the system.</p>
+    {% endif %}
+</div>
+{% endblock %}

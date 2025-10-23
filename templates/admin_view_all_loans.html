@@ -1,0 +1,43 @@
+{% include 'base.html' %}
+{% block content %}
+<div class="admin-view-container">
+    <h2>All Loan Records</h2>
+    <a href="{{ url_for('admin_dashboard') }}" class="back-link">&larr; Back to Dashboard</a>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+
+    {% if all_loans %}
+        <table class="detail-table">
+            <thead>
+                <tr>
+                    <th>Loan ID</th>
+                    <th>Borrower</th>
+                    <th>Amount</th>
+                    <th>Balance</th>
+                    <th>Interest</th>
+                    <th>Term (Months)</th>
+                    <th>Status</th>
+                    <th>Application Date</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for loan in all_loans %}
+                <tr>
+                    <td>{{ loan.id }}</td>
+                    <td>{{ loan.borrower.fullname }}</td>
+                    <td>₱{{ '{:,.2f}'.format(loan.amount) }}</td>
+                    <td>₱{{ '{:,.2f}'.format(loan.balance) }}</td>
+                    <td>{{ loan.interest_rate }}%</td>
+                    <td>{{ loan.term_months }}</td>
+                    <td class="status-{{ loan.status|lower }}">
+                        {{ loan.status }}
+                    </td>
+                    <td>{{ loan.application_date.strftime('%Y-%m-%d') }}</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    {% else %}
+        <p class="no-data">No loan records found in the system.</p>
+    {% endif %}
+</div>
+{% endblock %}
