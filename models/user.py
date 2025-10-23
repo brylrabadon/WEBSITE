@@ -10,24 +10,26 @@ from sqlalchemy import desc
 # 1. SQLAlchemy Model Definition (The ORM table structure)
 # -----------------------------------------------------------
 class UserModel(db.Model):
-    __tablename__ = 'user' # Ensures table name is lowercase 'user'
+    __tablename__ = 'user'
 
     id = db.Column(db.Integer, primary_key=True)
     fullname = db.Column(db.String(150), nullable=False)
     email = db.Column(db.String(150), unique=True, nullable=False)
-    password_hash = db.Column(db.String(256), nullable=False)
+    password = db.Column(db.String(256), nullable=False)
     role = db.Column(db.String(50), nullable=False)
-    is_approved = db.Column(db.Boolean, default=False, nullable=False) # The column that was missing
+    is_approved = db.Column(db.Boolean, default=False, nullable=False)
 
     # Relationships to models defined in post.py
     posts = db.relationship('PostModel', backref='author', lazy=True)
     loans = db.relationship('LoanModel', backref='borrower', lazy=True)
 
     def set_password(self, password):
-        self.password_hash = generate_password_hash(password)
+        # FIX: Must use the full imported function name: generate_password_hash
+        self.password = generate_password_hash(password)
 
     def check_password(self, password):
-        return check_password_hash(self.password_hash, password)
+        # FIX: Must use the full imported function name: check_password_hash
+        return check_password_hash(self.password, password)
 
     def __repr__(self):
         return f"User('{self.fullname}', '{self.email}', '{self.role}')"

@@ -1,4 +1,4 @@
-# models/post.py
+# models/post.py (CORRECTED)
 
 from .db import db # Corrected import path
 from datetime import datetime
@@ -15,8 +15,8 @@ class PostModel(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     content = db.Column(db.Text, nullable=False)
     created_at = db.Column(db.DateTime, nullable=False, default=datetime.utcnow)
+    # FIX: Changed 'user_id' to 'user.id' to correctly reference UserModel's primary key
     user_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)
-
     def __repr__(self):
         return f"Post('{self.content[:20]}...', 'User ID: {self.user_id}')"
 
@@ -29,8 +29,8 @@ class LoanModel(db.Model):
     term_months = db.Column(db.Integer, nullable=False)
     status = db.Column(db.String(50), default='Pending', nullable=False)
     application_date = db.Column(db.DateTime, nullable=False, default=datetime.utcnow)
+    # FIX: Changed 'user_id' to 'user.id' to correctly reference UserModel's primary key
     user_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)
-
     def __repr__(self):
         return f"Loan('{self.amount}', Status: '{self.status}')"
 
@@ -40,6 +40,7 @@ class LoanModel(db.Model):
 # -----------------------------------------------------------
 
 class Post:
+# ... (Rest of the class remains the same)
     def __init__(self, db_connection):
         self.db = db_connection
 
