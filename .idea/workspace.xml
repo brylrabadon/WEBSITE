@@ -4,14 +4,7 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="d3401c40-292f-4790-8159-1a2e016027cc" name="Changes" comment="">
-      <change beforePath="$PROJECT_DIR$/.idea/Web.iml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/Web.iml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/instance/loansystem.db" beforeDir="false" afterPath="$PROJECT_DIR$/instance/loansystem.db" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/models/post.py" beforeDir="false" afterPath="$PROJECT_DIR$/models/post.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/models/user.py" beforeDir="false" afterPath="$PROJECT_DIR$/models/user.py" afterDir="false" />
-    </list>
+    <list default="true" id="d3401c40-292f-4790-8159-1a2e016027cc" name="Changes" comment="" />
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -119,7 +112,7 @@
       <option name="ADD_CONTENT_ROOTS" value="true" />
       <option name="ADD_SOURCE_ROOTS" value="true" />
       <EXTENSION ID="PythonCoverageRunConfigurationExtension" runner="coverage.py" />
-      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/../../../../../WEBSITE" />
+      <option name="SCRIPT_NAME" value="$USER_HOME$/WEBSITE" />
       <option name="PARAMETERS" value="" />
       <option name="SHOW_COMMAND_LINE" value="false" />
       <option name="EMULATE_TERMINAL" value="false" />
@@ -168,6 +161,7 @@
       <workItem from="1761462374009" duration="1569000" />
       <workItem from="1761464225306" duration="3282000" />
       <workItem from="1761490403463" duration="1639000" />
+      <workItem from="1761494707426" duration="6285000" />
     </task>
     <servers />
   </component>
@@ -177,7 +171,7 @@
   <component name="com.intellij.coverage.CoverageDataManagerImpl">
     <SUITE FILE_PATH="coverage/Web$Web.coverage" NAME="Web Coverage Results" MODIFIED="1760454527732" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="" />
     <SUITE FILE_PATH="coverage/bryl_py$bryl.coverage" NAME="bryl Coverage Results" MODIFIED="1761053088889" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
-    <SUITE FILE_PATH="coverage/bryl_py$Web.coverage" NAME="Web Coverage Results" MODIFIED="1761490521981" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="" />
+    <SUITE FILE_PATH="coverage/bryl_py$Web.coverage" NAME="Web Coverage Results" MODIFIED="1761501263291" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="" />
     <SUITE FILE_PATH="coverage/WEBSITE$bryl.coverage" NAME="bryl Coverage Results" MODIFIED="1760595752981" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
   </component>
 </project>

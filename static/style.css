@@ -1,5 +1,5 @@
 @import url('https://fonts.googleapis.com/css2?family=Inter:wght@100..900&display=swap');
-@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700;800&display=swap'); /* Added 800 weight */
 
 /* GLOBAL RESET AND FONT */
 * {
@@ -26,9 +26,9 @@ body {
     color: white; /* Default text color is white for the dark background */
 }
 
-/* NEW: Background image and gradient overlay to match the photo */
-body.minimal-background {
-    /* RESTORED: User's original background image */
+/* Backgrounds - Unified style for all dark pages */
+body.minimal-background,
+.admin-page-body {
     background-image: url('https://static.vecteezy.com/system/resources/previews/010/518/840/non_2x/digital-finance-and-banking-service-in-futuristic-background-bank-building-with-online-payment-transaction-secure-money-and-financial-innovation-technology-vector.jpg');
     background-size: cover;
     background-position: center;
@@ -37,15 +37,15 @@ body.minimal-background {
 }
 
 /* Overlay for the dark mood */
-body.minimal-background::before {
+body.minimal-background::before,
+.admin-page-body::before {
     content: "";
     position: absolute;
     top: 0;
     left: 0;
     width: 100%;
     height: 100%;
-    /* RESTORED: User's original, slightly lighter overlay */
-    background-color: rgba(0, 0, 0, 0.5);
+    background-color: rgba(0, 0, 0, 0.7); /* Darker overlay for better contrast */
     z-index: -1;
 }
 
@@ -59,8 +59,7 @@ a:hover {
     color: #ffd700; /* Subtle gold/yellow hover */
 }
 
-.flash-messages {
-    z-index: 1000;
+.flash-messages-container { /* Added container for flash messages */
     position: fixed;
     top: 80px; /* Below the top nav */
     left: 50%;
@@ -68,6 +67,12 @@ a:hover {
     width: 100%;
     max-width: 500px;
     padding: 0 15px;
+    z-index: 1000;
+    pointer-events: none; /* Allows clicks to pass through */
+}
+
+.flash-messages {
+    pointer-events: auto; /* Re-enable pointer events for the messages themselves */
 }
 
 .flash-messages p {
@@ -76,6 +81,7 @@ a:hover {
     border-radius: 5px;
     font-size: 0.95rem;
     font-weight: 600;
+    text-align: center; /* Center the flash messages */
 }
 
 .success {
@@ -90,20 +96,25 @@ a:hover {
 }
 
 
-/* --- TOP NAVIGATION --- */
+/* --- TOP NAVIGATION (THE FIX) --- */
 
 .top-nav {
-    position: absolute;
+    position: fixed;
     top: 0;
     width: 100%;
     background-color: transparent;
     padding: 25px 50px;
     z-index: 100;
+    display: flex;
+    /* This property is the key to pushing the logo to the left and links to the right */
+    justify-content: space-between;
+    align-items: center;
 }
 
 .nav-links-top {
     list-style: none;
     display: flex;
+    /* Explicitly align to the end (right) */
     justify-content: flex-end;
     align-items: center;
     gap: 35px;
@@ -122,7 +133,7 @@ a:hover {
     border-bottom: 2px solid white;
 }
 
-/* Navigation Buttons (Sign In/Sign Up) */
+/* Navigation Buttons (Logout) */
 .nav-links-top .btn-nav {
     padding: 8px 20px;
     border: 1px solid white;
@@ -132,26 +143,15 @@ a:hover {
     text-transform: capitalize;
     background-color: transparent;
     color: white;
+    transition: background-color 0.2s, color 0.2s, border-color 0.2s;
 }
 
 .nav-links-top .btn-nav:hover {
     background-color: rgba(255, 255, 255, 0.1);
 }
 
-.nav-links-top .btn-nav.primary {
-    background-color: white;
-    color: #333;
-    border: 1px solid white;
-}
-
-.nav-links-top .btn-nav.primary:hover {
-    background-color: #eee;
-}
-
 /* Logo Styling */
 .logo {
-    position: absolute;
-    left: 50px;
     font-size: 1.5rem;
     font-weight: 700;
     color: white;
@@ -160,20 +160,21 @@ a:hover {
 
 /* --- FORM STYLES --- */
 
-.wrapper {
+/* Unified wrapper for centered content */
+.standalone-wrapper {
+    width: 100%;
+    min-height: 100vh;
     display: flex;
     justify-content: center;
     align-items: center;
-    width: 100%;
-    max-width: 600px;
-    height: auto;
-    min-height: auto;
-    margin: auto;
+    flex-direction: column;
+    margin: 0;
+    padding: 120px 0 50px 0;
     box-shadow: none;
-    background-color: transparent;
-    padding: 20px;
-    overflow: visible;
+    overflow-x: hidden;
+    background: transparent;
 }
+
 
 .login-container, .register-container, .loan-application-container {
     width: 100%;
@@ -230,7 +231,7 @@ a:hover {
 }
 
 .form-group label {
-    display: none; /* Hide labels */
+    display: none; /* Hide labels by default */
 }
 
 /* Input Styles - Large, rounded, translucent */
@@ -247,12 +248,10 @@ a:hover {
     color: white;
     background-color: rgba(255, 255, 255, 0.1);
     transition: background-color 0.2s, box-shadow 0.2s;
-    /* Custom styling for select to fix visibility issue */
     appearance: none; /* Remove default styling */
 }
 
 .form-group select {
-    /* Custom arrow for select box (optional, but cleaner) */
     background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='white' width='18px' height='18px'%3E%3Cpath d='M7 10l5 5 5-5z'/%3E%3C/svg%3E");
     background-repeat: no-repeat;
     background-position: right 20px center;
@@ -288,9 +287,11 @@ a:hover {
     z-index: 10;
 }
 
+/* Adjusted padding for inputs with icons */
 .form-group input[type="text"],
 .form-group input[type="email"],
-.form-group input[type="password"] {
+.form-group input[type="password"],
+.form-group input[type="number"] {
     padding-left: 50px; /* Space for the icon */
 }
 
@@ -330,6 +331,10 @@ a:hover {
     border-top: none;
     font-size: 0.9rem;
     color: rgba(255, 255, 255, 0.7);
+}
+
+.form-links.action-link { /* Added for consistent centering */
+    justify-content: center;
 }
 
 .form-links a {
@@ -389,379 +394,69 @@ a:hover {
 /* DASHBOARD AND OTHER STANDALONE PAGE STYLES (PRESERVED & ADJUSTED) */
 /* ------------------------------------------------------------------- */
 
-/* Resetting the text color for non-minimalist background pages */
-.dashboard-wrapper, .standalone-form-container, .payment-container, .info-page-container {
-    color: initial;
+/* Wrapper for Admin Pages */
+.admin-page-body {
+    background-image: url('https://static.vecteezy.com/system/resources/previews/010/518/840/non_2x/digital-finance-and-banking-service-in-futuristic-background-bank-building-with-online-payment-transaction-secure-money-and-financial-innovation-technology-vector.jpg');
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+    background-attachment: fixed;
+    background-color: #333;
+    color: white; /* Ensure all default text is white */
 }
 
-.standalone-wrapper {
-    width: 100%;
-    max-width: 100%;
-    height: 100vh;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    flex-direction: column;
-    background: #fff;
-    margin: 0;
-    padding: 0;
-    box-shadow: none;
-    overflow: auto;
-}
-
-.standalone-form-container, .payment-container {
-    width: 90%;
-    max-width: 750px;
-    padding: 60px 40px;
-    margin: 80px auto;
-    background: #fff;
-    border-radius: 15px;
-    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.05);
-}
-
-.standalone-form-container h2, .payment-container h2 {
-    font-size: 2.2rem;
-    font-weight: 800;
-    color: #191919;
-    margin-bottom: 30px;
-    text-align: center;
-    text-transform: uppercase;
-}
-
-/* Info Page Styles (About Us/Contact) */
-.info-page-container {
-    width: 90%;
-    max-width: 700px;
-    padding: 20px;
-    margin: 50px auto;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-}
-
-.info-card {
-    background: #fff;
-    padding: 40px;
-    border-radius: 15px;
-    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
-    text-align: center;
-}
-
-.info-card h2 {
-    color: #333;
-    margin-bottom: 20px;
-    font-weight: 800;
-}
-
-.info-card p {
-    color: #555;
-    margin-bottom: 15px;
-    line-height: 1.6;
-}
-
-.contact-info {
-    text-align: left;
-    margin: 20px 0;
-    list-style: none;
-    padding-left: 0;
-}
-
-.contact-info li {
-    margin: 10px 0;
-    color: #333;
-}
-
-.contact-info strong {
-    color: #4c6fff;
-    font-weight: 600;
-}
-
-
-/* --- DASHBOARD STYLES --- */
-
-.dashboard-wrapper {
-    width: 90%;
-    max-width: 1500px;
-    background: rgb(136, 76, 255);
-    border-radius: 15px;
-    padding: 30px;
-    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.15);
-    margin: 100px auto 30px auto;
-    min-height: 100vh;
-}
-
-.dashboard-nav {
-    position: fixed;
+.admin-page-body::before {
+    content: "";
+    position: absolute;
     top: 0;
     left: 0;
     width: 100%;
-    background-color: #4c6fff;
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-    z-index: 1000;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.7); /* Darker overlay for better contrast */
+    z-index: -1;
 }
 
-.dashboard-nav .container {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    max-width: 1200px;
-    margin: 0 auto;
-    padding: 15px 30px;
-}
-
-.dashboard-nav .logo {
-    color: white;
-    font-size: 1.2rem;
-    font-weight: 800;
-    position: static;
-    left: initial;
-}
-
-.dashboard-nav .nav-links {
-    list-style: none;
-    display: flex;
-    gap: 30px;
-}
-
-.dashboard-nav .nav-links a {
-    color: white;
-    font-weight: 600;
-    padding: 5px 0;
-    transition: color 0.3s, border-bottom 0.3s;
-}
-
-.dashboard-nav .nav-links a:hover,
-.dashboard-nav .nav-links a.active {
-    color: white;
-    border-bottom: 3px solid #ffcc00;
-}
-
-
-.dashboard-welcome {
-    margin-bottom: 30px;
-    padding-bottom: 20px;
-    border-bottom: 1px solid #eee;
-}
-
-.dashboard-welcome h2 {
-    font-size: 2rem;
-    color: #333;
-    margin-bottom: 5px;
-}
-
-.dashboard-welcome p {
-    color: #777;
-    font-size: 1.1rem;
-}
-
-.dashboard-section {
-    margin-bottom: 40px;
-    background: #f9f9f9;
-    padding: 20px;
-    border-radius: 10px;
-    border: 3px solid #191919;
-}
-
-.dashboard-section h3 {
-    font-size: 1.5rem;
-    color: #4c6fff;
-    margin-bottom: 20px;
-    border-bottom: 2px solid #4c6fff;
-    padding-bottom: 5px;
-    display: inline-block;
-}
-
-.no-active-loan {
-    padding: 15px;
-    background-color: #fff3cd;
-    color: #856404;
-    border: 1px solid #ffeeba;
-    border-radius: 5px;
-    font-weight: 600;
-}
-
-.loan-details, .payment-summary {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-    gap: 20px;
-    margin-bottom: 20px;
-}
-
-.detail-card {
-    background: #fff;
-    padding: 15px;
-    border-radius: 8px;
-    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.05);
-    border-left: 5px solid #4c6fff;
-}
-
-.detail-card strong {
-    display: block;
-    font-size: 0.9rem;
-    color: #777;
-    margin-bottom: 5px;
-}
-
-.detail-card p {
-    font-size: 1.3rem;
-    color: #333;
-    font-weight: 700;
-}
-
-.loan-id p {
-    color: #ff6f00;
-}
-
-.loan-balance p {
-    color: #d9534f;
-}
-
-.loan-submit-button, .btn {
-    width: 100%;
-    padding: 12px;
-    border: none;
-    border-radius: 8px;
-    font-weight: 700;
-    cursor: pointer;
-    transition: background-color 0.3s, opacity 0.3s;
-    text-transform: uppercase;
-    text-align: center;
-    display: inline-block;
-}
-
-.loan-submit-button {
-    background-color: #4c6fff;
-    color: white;
-}
-
-.loan-submit-button:hover {
-    background-color: #375aff;
-}
-
-.btn {
-    text-decoration: none;
-    padding: 10px 20px;
-    border-radius: 8px;
-    font-weight: 600;
-    transition: opacity 0.3s;
-    margin-right: 10px;
-    margin-top: 5px;
-    display: inline-block;
-
-}
-
-.primary-btn {
-    background-color: #75e0f3;
-    color: #191919;
-    border: 2px solid #4c6fff;
-
-}
-
-.secondary-btn {
-    background-color: #75e0f3;
-    color: #191919;
-    border: 2px solid #4c6fff;
-}
-
-.tertiary-btn {
-    background-color: #75e0f3;
-    color: #191919;
-    border: 2px solid #4c6fff;
-}
-.tertiary-btn:hover {
-    background-color: #75e0f3;
-}
-
-.check-icon {
-    margin-right: 8px;
-    color: #4c6fff;
-    font-weight: 700;
-}
-
-.status-active {
-    color: #008000;
-    font-weight: 600;
-}
-
-.dashboard-section ul {
-    list-style: none;
-    padding-left: 0;
-}
-
-table {
-    width: 100%;
-    border-collapse: collapse;
-    margin-top: 15px;
-    font-size: 0.95rem;
-    box-shadow: 0 2px 5px rgba(0,0,0,0.05);
-    background-color: #fff;
-    border-radius: 8px;
-    overflow: hidden;
-}
-
-th, td {
-    padding: 12px 15px;
-    text-align: left;
-    border-bottom: 1px solid #ddd;
-}
-
-th {
-    background-color: #4c6fff;
-    color: white;
-    font-weight: 700;
-    text-transform: uppercase;
-    font-size: 0.85rem;
-}
-
-tr:nth-child(even) {
-    background-color: #f7f7f7;
-}
-
-tr:hover {
-    background-color: #f0f0ff;
-}
-
-.status-pending {
-    color: #ffc107;
-    font-weight: 700;
-}
-
-.status-approved {
-    color: #28a745;
-    font-weight: 700;
-}
-
-.status-completed {
-    color: #007bff;
-    font-weight: 700;
-}
-
-.status-denied {
-    color: #dc3545;
-    font-weight: 700;
-}
-
-.payment-submit-button {
-    background-color: #ff6f00;
-    color: white;
-}
-
-.payment-submit-button:hover {
-    background-color: #cc5800;
-}
-
-.admin-dashboard-container {
+.admin-dashboard-container, .admin-view-container {
+    width: 90%;
+    max-width: 1400px;
     padding: 30px;
+    margin: 100px auto 50px auto; /* Adjust margin for visibility */
 }
 
-.admin-dashboard-container h2 {
-    font-size: 2rem;
-    color: #ffffff;
+/* CRITICAL FIX: Flexbox for Admin Header to position Logout button right */
+.admin-header-row {
+    display: flex;
+    justify-content: space-between; /* Pushes items to the ends */
+    align-items: center;
     margin-bottom: 30px;
+    width: 100%;
+}
+/* Existing admin-dashboard-header is replaced by the new admin-header-row styling */
+.admin-dashboard-header {
+    display: none; /* Hide the old header div if it exists */
+}
+/* END CRITICAL FIX */
+
+
+.admin-dashboard-container h2, .admin-view-container h2 {
+    font-size: 2.5rem;
+    color: white; /* Clear white text */
     font-weight: 800;
-    text-align: center;
+    text-shadow: 0 0 5px rgba(0, 0, 0, 0.5); /* Subtle shadow for depth */
 }
 
+/* New Dark Card Style for background panels */
+.dark-card {
+    background-color: rgba(255, 255, 255, 0.1); /* Translucent White */
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    border-radius: 15px;
+    padding: 30px;
+    backdrop-filter: blur(10px); /* Glassmorphism effect */
+    box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.3);
+    margin-bottom: 40px;
+}
+
+/* Card Links (Overview) - Increased contrast */
 .admin-overview-cards {
     display: flex;
     justify-content: space-around;
@@ -771,39 +466,41 @@ tr:hover {
 
 .card-link {
     flex: 1;
-    padding: 20px;
-    border-radius: 10px;
+    padding: 25px;
+    border-radius: 12px;
     color: white;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.4);
     transition: transform 0.3s, box-shadow 0.3s;
     text-decoration: none;
-}
-
-.card-link:hover {
-    transform: translateY(-5px);
-    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
+    text-align: center;
+    /* Ensuring background is vibrant */
+    background: linear-gradient(135deg, var(--card-color-start), var(--card-color-end));
 }
 
 .user-card {
-    background-color: #4c6fff;
+    --card-color-start: #4c6fff; /* Blue */
+    --card-color-end: #3259b3;
 }
 
 .loan-card {
-    background-color: #28a745;
+    --card-color-start: #28a745; /* Green */
+    --card-color-end: #1a7431;
 }
 
 .payment-card {
-    background-color: #ff6f00;
+    --card-color-start: #ff6f00; /* Orange */
+    --card-color-end: #b34f00;
 }
 
 .card-link h3 {
-    font-size: 1.5rem;
+    font-size: 1.6rem;
     margin-bottom: 10px;
+    font-weight: 700;
 }
 
 .card-link p {
-    font-size: 1.8rem;
-    font-weight: 700;
+    font-size: 2.2rem;
+    font-weight: 800;
 }
 
 .card-action {
@@ -814,173 +511,403 @@ tr:hover {
     padding-top: 10px;
 }
 
-.admin-approval-section {
-    margin-bottom: 40px;
-}
-
+/* Approval Section Headers - Increased contrast */
 .admin-approval-section h3 {
-    font-size: 1.8rem;
-    color: #ffffff;
-    margin-bottom: 20px;
-    border-bottom: 2px solid #ccc;
-    padding-bottom: 5px;
+    font-size: 2rem;
+    color: white;
+    margin-bottom: 25px;
+    border-bottom: 2px solid rgba(255, 255, 255, 0.3);
+    padding-bottom: 10px;
+    display: block;
+    font-weight: 700;
+    text-align: left;
 }
 
 .admin-approval-section h4 {
-    font-size: 1.2rem;
-    color: #ffffff;
+    font-size: 1.3rem;
+    color: #ffd700; /* Highlight color for clarity */
     margin-top: 25px;
     margin-bottom: 15px;
-    padding-left: 10px;
-    border-left: 4px solid #4c6fff;
-}
-
-.approval-table {
-    width: 100%;
-    margin-top: 0;
-}
-
-.approval-table th {
-    background-color: #555;
-}
-
-.approval-table td {
-    vertical-align: middle;
-}
-
-.approve-btn, .reject-btn, .payment-btn {
-    padding: 8px 15px;
-    border: none;
-    border-radius: 5px;
+    padding-left: 0;
+    border-left: none;
     font-weight: 600;
-    cursor: pointer;
-    transition: opacity 0.3s;
 }
 
-.approve-btn, .payment-btn {
-    background-color: #28a745;
+/* NEW DARK TABLE STYLES - Applied to all Admin tables (Approval/Detail) */
+.dark-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 15px;
+    font-size: 1rem;
+    background-color: rgba(0, 0, 0, 0.2); /* Slightly transparent dark background */
+    border-radius: 8px;
+    overflow: hidden;
+}
+
+.dark-table th {
+    padding: 15px 20px;
+    background-color: rgba(255, 255, 255, 0.1); /* Dark Header */
     color: white;
-    margin-right: 5px;
+    font-weight: 700;
+    text-transform: uppercase;
+    font-size: 0.85rem; /* Adjusted for borrower dashboard clarity */
+    text-align: left; /* Ensures table headers align left */
+    border-bottom: 2px solid rgba(255, 255, 255, 0.3);
+}
+
+.dark-table td {
+    padding: 12px 20px;
+    text-align: left;
+    color: white; /* Clear white text */
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1); /* Subtle separator */
+}
+
+/* --- Added style to highlight key data like Balance --- */
+.dark-table td.highlight {
+    font-weight: 700;
+    color: #ffd700; /* Subtle Gold/Yellow for emphasis */
+}
+
+/* --- Added style for no data cell --- */
+.dark-table .no-data-cell {
+    text-align: center;
+    padding: 20px;
+    font-style: italic;
+    color: rgba(255, 255, 255, 0.6);
+}
+
+/* Alternate row color for better readability on dark tables */
+.dark-table tr:nth-child(even) {
+    background-color: rgba(255, 255, 255, 0.05);
+}
+
+.dark-table tr:hover {
+    background-color: rgba(255, 255, 255, 0.15); /* Slightly brighter hover */
+}
+
+/* Status Colors - Ensure high contrast on dark background */
+.status-pending, .status-no {
+    color: #ffd700; /* Gold/Yellow */
+    font-weight: 700;
+}
+
+.status-approved, .status-yes {
+    color: #50ff99; /* Bright Green */
+    font-weight: 700;
+}
+
+.status-completed {
+    color: #75e0f3; /* Bright Blue/Cyan */
+    font-weight: 700;
+}
+
+.status-denied {
+    color: #ff5050; /* Bright Red */
+    font-weight: 700;
+}
+
+/* Buttons on Dark Tables (Increased visibility) */
+.approve-btn, .payment-btn {
+    background-color: #50ff99; /* Bright Green */
+    color: #191919;
 }
 
 .approve-btn:hover, .payment-btn:hover {
-    background-color: #1e7e34;
+    background-color: #3bd47c;
 }
 
 .reject-btn {
-    background-color: #dc3545;
+    background-color: #ff5050; /* Bright Red */
     color: white;
 }
 
 .reject-btn:hover {
-    background-color: #c82333;
+    background-color: #d83a3a;
 }
 
 .no-pending, .no-data {
     padding: 15px;
-    background-color: #f0f0f0;
-    border: 1px solid #ccc;
+    background-color: rgba(255, 255, 255, 0.1);
+    border: 1px solid rgba(255, 255, 255, 0.2);
     border-radius: 5px;
     text-align: center;
-    color: #777;
+    color: white;
+    font-weight: 600;
     margin-top: 15px;
-}
-
-
-.admin-view-container {
-    padding: 30px;
-}
-
-.admin-view-container h2 {
-    font-size: 2rem;
-    color: #ffffff;
-    margin-bottom: 15px;
-    font-weight: 800;
-    text-align: center;
 }
 
 .back-link {
     display: inline-block;
     margin-bottom: 25px;
-    color: #4c6fff;
+    color: #75e0f3; /* Bright link color */
     font-weight: 600;
-    transition: color 0.3s;
 }
 
 .back-link:hover {
-    color: #375aff;
+    color: #50ff99;
 }
 
-.detail-table th {
-    background-color: #4c6fff;
+/* NEW: Log Out Button Style */
+.logout-btn {
+    background-color: transparent;
+    border: 2px solid white;
+    color: white;
+    padding: 10px 20px;
+    border-radius: 30px;
+    font-weight: 700;
+    cursor: pointer;
+    transition: background-color 0.2s, color 0.2s;
+    font-size: 1rem;
 }
 
-.status-approved, .status-yes {
-    color: #28a745;
+.logout-btn:hover {
+    background-color: white;
+    color: #333;
 }
 
-.status-pending, .status-no {
-    color: #ffc107;
+/* Cleanup of unused/overridden styles for Admin views */
+.approval-table { /* Overrides detail-table in Admin context */
+    /* Using dark-table properties now */
 }
-
-.status-denied {
-    color: #dc3545;
-}
-
-.status-completed {
-    color: #007bff;
+.detail-table { /* Overridden by dark-table in Admin context */
+    /* Using dark-table properties now */
 }
 
 @media (max-width: 900px) {
-    .top-nav {
-        padding: 15px 20px;
-    }
-    .logo {
-        left: 20px;
-    }
-    .nav-links-top {
-        gap: 15px;
-        position: static;
-        justify-content: center;
-        margin-top: 10px; /* Reduced margin */
-    }
-
-    .wrapper {
-        width: 100%;
-        max-width: 450px;
-        padding: 25px;
-        box-shadow: none;
-    }
-
-    .login-container {
-        padding: 0;
-    }
-
-    .login-form, .register-form {
-        max-width: 100%;
-    }
-
-    .dashboard-nav .container {
+    /* ... (media query styles remain) ... */
+    /* Updated for the new admin-header-row class */
+    .admin-header-row {
         flex-direction: column;
-        padding: 10px 20px;
+        align-items: flex-start;
     }
 
-    .dashboard-nav .nav-links {
-        gap: 15px;
+    .admin-dashboard-container h2 {
+        margin-bottom: 15px;
+    }
+
+    /* Make the logout button full width on smaller screens */
+    .admin-header-row .logout-btn {
         margin-top: 10px;
+        width: 100%;
+        text-align: center;
     }
 
-    .dashboard-wrapper {
-        padding: 20px;
-        margin-top: 130px;
+    .top-nav {
+        padding: 15px 20px; /* Adjust padding for smaller screens */
+        flex-direction: row; /* Keep elements on one row on mobile */
+        justify-content: space-between;
     }
 
-    .standalone-form-container, .payment-container {
-        padding: 30px 20px;
-        margin: 30px auto;
+    .top-nav .logo {
+        position: static; /* Remove absolute positioning on small screens */
+        margin-bottom: 0;
     }
 
-    .admin-overview-cards {
-        flex-direction: column;
+    .nav-links-top {
+        width: auto;
+        justify-content: flex-end;
+        gap: 15px;
     }
+}
+
+/* ------------------------------------------------------------------- */
+/* STANDALONE FORM STYLES (for pages with dark-card background) */
+/* ------------------------------------------------------------------- */
+
+.styled-form-container {
+    width: 90%;
+    max-width: 550px; /* Slightly wider than login form for more content */
+    padding: 40px 30px; /* Adjusted padding */
+    margin: 40px auto;
+    /* Properties inherited from .dark-card: background-color, border, border-radius, backdrop-filter, box-shadow */
+    text-align: center;
+}
+
+.styled-form-container h2 {
+    font-size: 2.5rem; /* Larger, matching dashboard headers */
+    font-weight: 800;
+    color: white; /* Clear white text */
+    margin-bottom: 30px;
+    text-align: center;
+    text-transform: uppercase;
+    text-shadow: 0 0 5px rgba(0, 0, 0, 0.5); /* Subtle shadow for depth */
+}
+
+/* Input styles for forms within a dark-card */
+.styled-form-container .form-group input[type="text"],
+.styled-form-container .form-group input[type="email"],
+.styled-form-container .form-group input[type="password"],
+.styled-form-container .form-group input[type="number"],
+.styled-form-container .form-group select {
+    width: 100%;
+    padding: 15px 20px; /* Slightly smaller padding than login inputs */
+    border: 1px solid rgba(255, 255, 255, 0.3); /* Visible border */
+    border-radius: 10px; /* Less rounded for a slightly more modern feel */
+    font-size: 1rem;
+    color: white; /* White text for clarity */
+    background-color: rgba(255, 255, 255, 0.15); /* Slightly less transparent */
+    transition: background-color 0.2s, box-shadow 0.2s;
+}
+
+.styled-form-container .form-group input::placeholder,
+.styled-form-container .form-group select:invalid {
+    color: rgba(255, 255, 255, 0.7); /* Clearer placeholder text */
+}
+
+.styled-form-container .form-group input:focus,
+.styled-form-container .form-group select:focus {
+    background-color: rgba(255, 255, 255, 0.25); /* Brighter on focus */
+    box-shadow: 0 0 0 2px #ffd700; /* Gold focus glow */
+    border-color: #ffd700;
+}
+
+.styled-form-container .input-icon {
+    color: rgba(255, 255, 255, 0.8); /* Brighter icons */
+    left: 15px; /* Adjust icon position due to less padding */
+}
+
+.styled-form-container .form-group input[type="text"],
+.styled-form-container .form-group input[type="email"],
+.styled-form-container .form-group input[type="password"],
+.styled-form-container .form-group input[type="number"] {
+    padding-left: 45px; /* Adjust for icon */
+}
+
+/* Custom label styles for dark cards (e.g., Select Loan, Payment Method) */
+.styled-form-container .form-group.custom-label label {
+    display: block;
+    text-align: left;
+    margin-bottom: 8px;
+    color: white; /* White label text */
+    font-weight: 600;
+    font-size: 0.95rem;
+}
+
+/* Select arrow for dark cards (should be white) */
+.styled-form-container .form-group select {
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='white' width='18px' height='18px'%3E%3Cpath d='M7 10l5 5 5-5z'/%3E%3C/svg%3E");
+    padding-right: 45px; /* Space for the arrow */
+}
+
+/* Options for select within dark cards */
+.styled-form-container .form-group select option {
+    background-color: #333; /* Darker option background */
+    color: white;
+}
+
+/* Titles and notes for Update Profile in dark card */
+.styled-form-container .form-section-title {
+    color: white;
+    font-weight: 700;
+    margin-top: 25px;
+    margin-bottom: 5px;
+    font-size: 1.1rem;
+    text-align: left;
+}
+
+.styled-form-container .form-section-note {
+    color: rgba(255, 255, 255, 0.8);
+    font-size: 0.85rem;
+    margin-bottom: 20px;
+    text-align: left;
+}
+
+
+/* Buttons for forms within dark cards */
+.dark-card-submit-button {
+    background-color: white; /* Default to white like Apply Loan button on dashboard */
+    color: #333;
+    padding: 12px 30px; /* Slightly smaller than login button */
+    border: none;
+    border-radius: 8px; /* Slightly less rounded */
+    font-weight: 700;
+    cursor: pointer;
+    transition: background-color 0.2s, box-shadow 0.2s;
+    font-size: 1rem;
+    width: 100%;
+    max-width: 300px; /* Matches dashboard button width */
+    margin-top: 20px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+}
+
+.dark-card-submit-button:hover {
+    background-color: #eee;
+    box-shadow: 0 6px 15px rgba(0, 0, 0, 0.3);
+}
+
+/* Specific button colors for Payment and Update Profile */
+.dark-card-submit-button.yellow-btn {
+    background-color: #ffd700; /* Yellow from dashboard */
+    color: #333;
+}
+.dark-card-submit-button.yellow-btn:hover {
+    background-color: #e0be00;
+}
+
+.dark-card-submit-button.blue-btn {
+    background-color: #4c6fff; /* Blue from dashboard */
+    color: white;
+}
+.dark-card-submit-button.blue-btn:hover {
+    background-color: #3b57d8;
+}
+
+/* Form links within dark cards */
+.styled-form-container .form-links a {
+    color: rgba(255, 255, 255, 0.7);
+    font-weight: 500;
+    text-decoration: underline;
+}
+
+.styled-form-container .form-links a:hover {
+    color: white;
+}
+
+/* No data message in dark cards */
+.styled-form-container .no-approved-loans-text,
+.styled-form-container .no-data {
+    color: white;
+    background-color: rgba(255, 255, 255, 0.1);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    padding: 15px;
+    border-radius: 8px;
+    margin-top: 20px;
+    font-weight: 500;
+    line-height: 1.6;
+}
+
+/* ------------------------------------------------------------------- */
+/* QUICK ACTIONS BUTTON ALIGNMENT (Essential for Dashboard Layout) */
+/* ------------------------------------------------------------------- */
+.quick-actions-grid {
+    display: flex;
+    justify-content: space-between; /* Spreads buttons evenly */
+    gap: 20px;
+    margin-top: 20px;
+}
+
+.quick-actions-grid a {
+    flex: 1; /* Makes each button take equal width */
+    text-align: center;
+    padding: 12px 20px;
+    border-radius: 8px;
+    font-weight: 700;
+    font-size: 1rem;
+    transition: all 0.2s;
+    text-transform: uppercase;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+}
+
+/* Use your existing button colors with specific classes for the dashboard */
+.quick-actions-grid .btn-apply {
+    background-color: white;
+    color: #333;
+}
+.quick-actions-grid .btn-payment {
+    background-color: #ffd700; /* Yellow */
+    color: #333;
+}
+.quick-actions-grid .btn-profile {
+    background-color: #75e0f3; /* Light Blue/Cyan */
+    color: #333;
 }

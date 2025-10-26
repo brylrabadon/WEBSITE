@@ -4,56 +4,56 @@
     <meta charset="UTF-8">
     <title>Make Payment | Loan System</title>
     <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
 </head>
-<body>
-    <nav class="dashboard-nav">
-        <div class="container">
-            <div class="logo">LOAN SYSTEM - BORROWER</div>
-            <ul class="nav-links">
-                <li><a href="{{ url_for('dashboard') }}">DASHBOARD</a></li>
-                <li><a href="{{ url_for('about') }}">ABOUT</a></li>
-                <li><a href="{{ url_for('contact') }}">CONTACT</a></li>
-                <li><a href="{{ url_for('logout') }}">LOGOUT</a></li>
-            </ul>
-        </div>
+<body class="admin-page-body">
+    <nav class="dashboard-nav top-nav">
+        <div class="logo">LOAN SYSTEM - BORROWER</div>
+
+        <ul class="nav-links-top">
+            <li><a href="{{ url_for('dashboard') }}" style="border-bottom: 2px solid transparent;">DASHBOARD</a></li>
+            <li><a href="{{ url_for('logout') }}" class="btn-nav">LOGOUT</a></li>
+        </ul>
     </nav>
 
-    {% with messages = get_flashed_messages(with_categories=true) %}
-        {% if messages %}
-            <div class="flash-messages" style="position: fixed; top: 70px; width: 100%; max-width: 1200px; z-index: 999; margin: 0 auto; padding: 0 30px;">
-            {% for category, message in messages %}
-                <p class="{{ category }}">{{ message }}</p>
-            {% endfor %}
-            </div>
-        {% endif %}
-    {% endwith %}
+    <div class="flash-messages-container">
+        {% with messages = get_flashed_messages(with_categories=true) %}
+            {% if messages %}
+                <div class="flash-messages">
+                {% for category, message in messages %}
+                    <p class="{{ category }}">{{ message }}</p>
+                {% endfor %}
+                </div>
+            {% endif %}
+        {% endwith %}
+    </div>
 
     <div class="standalone-wrapper">
-    <div class="standalone-form-container">
+    <div class="dark-card styled-form-container">
         <h2>Make A Payment</h2>
 
-            {% if active_loans %}
-            <form method="POST" action="{{ url_for('payment') }}">
+        {% if approved_loans %}
+            <form action="{{ url_for('payment') }}" method="post">
 
-                <div class="form-group">
-                    <label for="loan_id">Select Approved Loan:</label>
+                <div class="form-group custom-label">
+                    <label for="loan_id">Select Loan:</label>
                     <select name="loan_id" id="loan_id" required>
-                        {% for loan in active_loans %}
-                        <option value="{{ loan.id }}">
-                            Loan #{{ loan.id }} | Balance: ₱{{ "{:,.2f}".format(loan.balance) }} | Term: {{ loan.term_months }} months
-                        </option>
+                        <option value="">-- Select Your Approved Loan --</option>
+                        {% for loan in approved_loans %}
+                            <option value="{{ loan.id }}">Loan #{{ loan.id }} - Balance: ₱{{ '{:,.2f}'.format(loan.balance) }}</option>
                         {% endfor %}
                     </select>
                 </div>
 
                 <div class="form-group">
-                    <label for="payment_amount">Payment Amount (₱):</label>
-                    <input type="number" id="payment_amount" name="amount" step="0.01" required placeholder="e.g., 500.00">
+                    <i class="fas fa-money-bill-wave input-icon"></i>
+                    <input type="number" id="payment_amount" name="amount" step="0.01" required placeholder="Payment Amount (₱)">
                 </div>
 
-                <div class="form-group">
+                <div class="form-group custom-label">
                     <label for="payment_method">Payment Method:</label>
                     <select name="method" id="payment_method" required>
+                        <option value="">-- Select Payment Method --</option>
                         <option value="Bank Transfer">Bank Transfer</option>
                         <option value="Gcash">Gcash</option>
                         <option value="Paymaya">Paymaya</option>
@@ -61,17 +61,21 @@
                     </select>
                 </div>
 
-                <button type="submit" class="loan-submit-button">Submit Payment Request</button>
+                <button type="submit" class="dark-card-submit-button yellow-btn">Submit Payment Request</button>
             </form>
 
-            <div class="form-links">
+            <div class="form-links action-link">
                 <a href="{{ url_for('dashboard') }}">Back to Dashboard</a>
             </div>
 
             {% else %}
-            <p>You currently do not have any **Approved** loans to make a payment on. </p>
-            <p>Please apply for a loan or wait for an administrator to approve your existing application.</p>
-            <div class="form-links">
+            <div class="no-approved-loans-text">
+                <p>
+                    You currently do not have any **Approved** loans to make a payment on.
+                    <br>Please apply for a loan or wait for an administrator to approve your existing application.
+                </p>
+            </div>
+            <div class="form-links action-link">
                 <a href="{{ url_for('apply_loan') }}">Apply for a Loan</a>
             </div>
             {% endif %}

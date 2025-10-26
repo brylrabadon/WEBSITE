@@ -1,14 +1,17 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
+    <meta charset="UTF-8">
+    <title>{% block title %}Loan System{% endblock %}</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
     </head>
-<body>
-
+<body class="{% if session.get('role') == 'Admin' %}admin-page-body{% elif session.get('role') == 'Borrower' %}admin-page-body{% else %}minimal-background{% endif %}">
     <div class="container mt-3">
         {% with messages = get_flashed_messages(with_categories=true) %}
             {% if messages %}
-                {% for category, message in messages %}
-                    <div class="alert alert-{{ category }} alert-dismissible fade show" role="alert">
+                {% for category, message in messages %}\
+                    <div class="alert alert-{{ category }} alert-dismissible fade show" role="alert">\
                         {{ message }}
                         <button type="button" class="close" data-dismiss="alert" aria-label="Close">
                             <span aria-hidden="true">&times;</span>
@@ -23,5 +26,5 @@
         {% block content %}{% endblock %}
     </div>
 
-    </body>
+</body>
 </html>

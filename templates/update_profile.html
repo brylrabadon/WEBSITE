@@ -6,21 +6,17 @@
     <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
 </head>
-<body>
-    <nav class="dashboard-nav">
-        <div class="container">
-            <div class="logo">LOAN SYSTEM - {{ session.get('role', 'Borrower').upper() }}</div>
-            <ul class="nav-links">
-                <li><a href="{{ url_for('dashboard') }}">DASHBOARD</a></li>
-                <li><a href="{{ url_for('about') }}">ABOUT</a></li>
-                <li><a href="{{ url_for('contact') }}">CONTACT</a></li>
-                <li><a href="{{ url_for('logout') }}">LOGOUT</a></li>
-            </ul>
-        </div>
+<body class="admin-page-body">
+    <nav class="dashboard-nav top-nav">
+        <div class="logo">LOAN SYSTEM - {{ session.get('role', 'Borrower').upper() }}</div>
+
+        <ul class="nav-links-top">
+            <li><a href="{{ url_for('dashboard') }}" style="border-bottom: 2px solid transparent;">DASHBOARD</a></li>
+            <li><a href="{{ url_for('logout') }}" class="btn-nav">LOGOUT</a></li>
+        </ul>
     </nav>
 
-    <div class="standalone-form-container">
-
+    <div class="flash-messages-container">
         {% with messages = get_flashed_messages(with_categories=true) %}
             {% if messages %}
                 <div class="flash-messages">
@@ -30,43 +26,42 @@
                 </div>
             {% endif %}
         {% endwith %}
+    </div>
 
-        <div class="standalone-wrapper">
-    <div class="standalone-form-container">
-        <h2>Update Profile</h2>
+    <div class="standalone-wrapper">
+        <div class="dark-card styled-form-container">
+            <h2>Update Profile</h2>
+            <form action="{{ url_for('update_profile') }}" method="post">
 
-                <p class="profile-info-note">You can update your personal details and password here.</p>
+                <div class="form-group">
+                    <i class="fas fa-user input-icon"></i>
+                    <input type="text" id="fullname" name="fullname" placeholder="Full Name" value="{{ session.get('fullname', user.fullname) }}" required>
+                </div>
 
-                <form action="{{ url_for('update_profile') }}" method="POST">
+                <div class="form-group">
+                    <i class="fas fa-envelope input-icon"></i>
+                    <input type="email" id="email" name="email" placeholder="Email Address" value="{{ session.get('email', user.email) }}" readonly>
+                </div>
 
-                    <div class="form-group">
-                        <i class="fas fa-user"></i>
-                        <input type="text" id="fullname" name="fullname" placeholder="Full Name" value="{{ session.get('fullname', 'bryl rabadon') }}" required>
-                    </div>
+                <p class="password-change-title form-section-title">Change Password</p>
+                <p class="password-change-note form-section-note">Leave blank to keep current password</p>
 
-                    <div class="form-group">
-                        <i class="fas fa-envelope"></i>
-                        <input type="email" id="email" name="email" placeholder="Email Address" value="{{ session.get('email', 'brylcabanes@gmail.com') }}" readonly>
-                    </div>
+                <div class="form-group">
+                    <i class="fas fa-lock input-icon"></i>
+                    <input type="password" id="password" name="password" placeholder="New Password">
+                </div>
 
-                    <p class="password-change-title">Change Password</p>
-                    <p class="password-change-note">Leave blank to keep current password</p>
+                <div class="form-group">
+                    <i class="fas fa-lock input-icon"></i>
+                    <input type="password" id="confirm_password" name="confirm_password" placeholder="Confirm New Password">
+                </div>
 
-                    <div class="form-group">
-                        <i class="fas fa-lock"></i>
-                        <input type="password" id="password" name="password" placeholder="New Password">
-                    </div>
+                <button type="submit" class="dark-card-submit-button blue-btn">Save Changes</button>
 
-                    <div class="form-group">
-                        <i class="fas fa-lock"></i>
-                        <input type="password" id="confirm_password" name="confirm_password" placeholder="Confirm Password">
-                    </div>
-
-                    <button type="submit" class="update-submit-button">Save Changes</button>
-
-                    <a href="{{ url_for('dashboard') }}" class="btn-cancel">Cancel and Go Back</a>
-                </form>
-            </div>
+                <div class="form-links action-link">
+                    <a href="{{ url_for('dashboard') }}">Cancel and Go Back</a>
+                </div>
+            </form>
         </div>
     </div>
 </body>

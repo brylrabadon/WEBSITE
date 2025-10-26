@@ -1,13 +1,15 @@
 {% include 'base.html' %}
 {% block content %}
 <div class="admin-view-container">
-    <h2>All Payment Transactions</h2>
-    <a href="{{ url_for('admin_dashboard') }}" class="back-link">&larr; Back to Dashboard</a>
-    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
-
+    <div class="admin-header-row">
+        <h2>All Payment Transactions</h2>
+        <a href="{{ url_for('admin_dashboard') }}" class="back-link">
+            <i class="fas fa-arrow-left"></i> Back to Dashboard
+        </a>
+    </div>
 
     {% if all_payments %}
-        <table class="detail-table">
+        <table class="dark-table">
             <thead>
                 <tr>
                     <th>Payment ID</th>

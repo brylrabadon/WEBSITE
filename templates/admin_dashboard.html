@@ -1,9 +1,11 @@
 {% include 'base.html' %}
 {% block content %}
 <div class="admin-dashboard-container">
-    <h2>Admin Dashboard: Welcome, {{ fullname }}</h2>
-    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
 
+    <div class="admin-header-row">
+        <h2>Admin Dashboard: Welcome, {{ fullname }}</h2>
+        <a href="{{ url_for('logout') }}" class="logout-btn">LOGOUT</a>
+    </div>
 
     <div class="admin-overview-cards">
         <a href="{{ url_for('view_all_users') }}" class="card-link user-card">
@@ -23,12 +25,12 @@
         </a>
     </div>
 
-    <div class="admin-approval-section">
+    <div class="admin-approval-section dark-card">
         <h3>Pending Approvals</h3>
 
         <h4>Pending User Registration ({{ pending_users|length }})</h4>
         {% if pending_users %}
-            <table class="approval-table">
+            <table class="dark-table">
                 <thead>
                     <tr>
                         <th>ID</th>
@@ -47,7 +49,10 @@
                         <td>{{ user.role }}</td>
                         <td>
                             <form method="POST" action="{{ url_for('approve_user', user_id=user.id) }}" style="display:inline;">
-                                <button type="submit" class="approve-btn success-btn">Approve User</button>
+                                <button type="submit" class="approve-btn">Approve</button>
+                            </form>
+                            <form method="POST" action="{{ url_for('deny_user', user_id=user.id) }}" style="display:inline; margin-left: 10px;">
+                                <button type="submit" class="reject-btn">Deny</button>
                             </form>
                         </td>
                     </tr>
@@ -55,19 +60,19 @@
                 </tbody>
             </table>
         {% else %}
-            <p class="no-pending">🎉 No pending users to approve.</p>
+            <p class="no-pending">🎉 No pending user registrations.</p>
         {% endif %}
 
-        <h4 class="mt-4">Pending Loan Applications ({{ pending_loans|length }})</h4>
+        <h4>Pending Loan Applications ({{ pending_loans|length }})</h4>
         {% if pending_loans %}
-            <table class="approval-table">
+            <table class="dark-table">
                 <thead>
                     <tr>
                         <th>Loan ID</th>
                         <th>Borrower</th>
                         <th>Amount</th>
                         <th>Term (Months)</th>
-                        <th>Application Date</th>
+                        <th>Purpose</th>
                         <th>Action</th>
                     </tr>
                 </thead>
@@ -78,10 +83,13 @@
                         <td>{{ loan.borrower.fullname }}</td>
                         <td>₱{{ '{:,.2f}'.format(loan.amount) }}</td>
                         <td>{{ loan.term_months }}</td>
-                        <td>{{ loan.application_date.strftime('%Y-%m-%d') }}</td>
+                        <td>{{ loan.purpose }}</td>
                         <td>
                             <form method="POST" action="{{ url_for('approve_loan', loan_id=loan.id) }}" style="display:inline;">
                                 <button type="submit" class="approve-btn loan-btn">Approve Loan</button>
+                            </form>
+                            <form method="POST" action="{{ url_for('deny_loan', loan_id=loan.id) }}" style="display:inline; margin-left: 10px;">
+                                <button type="submit" class="reject-btn loan-btn">Deny</button>
                             </form>
                         </td>
                     </tr>
@@ -92,9 +100,9 @@
             <p class="no-pending">🎉 No pending loan applications.</p>
         {% endif %}
 
-        <h4 class="mt-4">Pending Payment Requests ({{ pending_payments|length }})</h4>
+        <h4>Pending Payment Requests ({{ pending_payments|length }})</h4>
         {% if pending_payments %}
-            <table class="approval-table">
+            <table class="dark-table">
                 <thead>
                     <tr>
                         <th>Payment ID</th>

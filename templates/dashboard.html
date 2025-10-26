@@ -4,24 +4,23 @@
     <meta charset="UTF-8">
     <title>{{ role }} Dashboard | Loan System</title>
     <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
 </head>
-<body>
+<body class="admin-page-body">
 
-    <nav class="dashboard-nav">
-        <div class="container">
-            <div class="logo">LOAN SYSTEM - {{ role.upper() }}</div>
-            <ul class="nav-links">
-                <li><a href="{{ url_for('dashboard') }}" class="active">DASHBOARD</a></li>
-                <li><a href="{{ url_for('about') }}">ABOUT</a></li>
-                <li><a href="{{ url_for('contact') }}">CONTACT</a></li>
-                <li><a href="{{ url_for('logout') }}">LOGOUT</a></li>
-            </ul>
-        </div>
+    <nav class="dashboard-nav top-nav">
+        <div class="logo">LOAN SYSTEM - {{ role.upper() }}</div>
+        <ul class="nav-links-top">
+            <li><a href="{{ url_for('dashboard') }}" class="active">DASHBOARD</a></li>
+            <li><a href="{{ url_for('about') }}">ABOUT</a></li>
+            <li><a href="{{ url_for('contact') }}">CONTACT</a></li>
+            <li><a href="{{ url_for('logout') }}" class="btn-nav">LOGOUT</a></li>
+        </ul>
     </nav>
 
     {% with messages = get_flashed_messages(with_categories=true) %}
         {% if messages %}
-            <div class="flash-messages" style="position: fixed; top: 70px; width: 100%; max-width: 1200px; z-index: 999; margin: 0 auto; padding: 0 30px;">
+            <div class="flash-messages">
             {% for category, message in messages %}
                 <p class="{{ category }}">{{ message }}</p>
             {% endfor %}
@@ -29,44 +28,34 @@
         {% endif %}
     {% endwith %}
 
-    <div class="dashboard-wrapper">
-        <h2>Welcome, {{ fullname }}!</h2>
-        <p>You are logged in as <strong>{{ role }}</strong>.</p>
+    <div class="admin-dashboard-container">
+        <h2>Borrower Dashboard: Welcome, {{ fullname }}</h2>
 
-        {% if role == 'Admin' %}
+        {% if not is_approved %}
 
-            <div class="dashboard-section">
-                <h3>Admin Controls</h3>
-                <p>Manage all system operations, users, and loan life cycles.</p>
-                <ul>
-                    <li><span class="check-icon">✔</span> View and manage all borrower accounts</li>
-                    <li><span class="check-icon">✔</span> Review and approve loan applications</li>
-                    <li><span class="check-icon">✔</span> Monitor payment statuses and balances</li>
-                    <li><span class="check-icon">✔</span> Generate comprehensive loan reports</li>
-                </ul>
-            </div>
+        <div class="dashboard-section dark-card" style="text-align: center;">
+            <p style="font-size: 1.2rem; font-weight: 600; color: #ffd700;">
+                Your account is currently **Pending Approval** by the administrator.
+            </p>
+            <p>Please wait for an email confirmation, or contact support if the delay is significant.</p>
+        </div>
 
-            <div class="dashboard-section">
-                <h3>Quick Actions</h3>
-                <a href="{{ url_for('admin_dashboard') }}" class="btn primary-btn">Go to Admin Panel</a>
-                <a href="#" class="btn secondary-btn">View Borrowers</a>
-                <a href="#" class="btn tertiary-btn">Generate Report</a>
-            </div>
+        {% else %}
 
-        {% elif role == 'Borrower' %}
-
-    <div class="dashboard-section">
-        <h3>Your Current Loans & Applications</h3>
-        <p>This table shows loans that are **Pending** approval or **Approved** with a remaining balance. Loans that are fully paid are moved to Payment History.</p>
+    <div class="dashboard-section dark-card">
+        <h3>💰 Active Loans ({{ user_loans|length }})</h3>
+        <p class="form-subtitle">Loans that are currently **Approved** and being paid off.</p>
 
         {% if user_loans %}
-            <table>
+            <table class="dark-table">
                 <thead>
                     <tr>
                         <th>Loan ID</th>
                         <th>Amount</th>
-                        <th>Current Balance</th> <th>Term (Months)</th>
+                        <th>Balance</th>
+                        <th>Term (Months)</th>
                         <th>Status</th>
+                        <th>Monthly Payment</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -74,27 +63,25 @@
                     <tr>
                         <td><strong>#{{ loan.id }}</strong></td>
                         <td>₱{{ "{:,.2f}".format(loan.amount) }}</td>
-                        <td>₱{{ "{:,.2f}".format(loan.balance) }}</td> <td>{{ loan.term_months }}</td>
-                        <td>
-                            <strong class="status-{{ loan.status | lower }}">
-                                {{ loan.status }}
-                            </strong>
-                        </td>
+                        <td><span class="status-{{ 'completed' if loan.balance <= 0 else 'pending' }}">₱{{ "{:,.2f}".format(loan.balance) }}</span></td>
+                        <td>{{ loan.term_months }}</td>
+                        <td class="status-{{ loan.status|lower }}">{{ loan.status }}</td>
+                        <td>₱{{ "{:,.2f}".format(loan.monthly_payment) }}</td>
                     </tr>
                     {% endfor %}
                 </tbody>
             </table>
         {% else %}
-            <p>You have no current active or pending loan applications.</p>
+            <p>No active loan records found.</p>
         {% endif %}
     </div>
 
-    <div class="dashboard-section">
-        <h3>Payment History</h3>
-        <p>These are the payments you have made that have been **Approved** by the administrator.</p>
+    <div class="dashboard-section dark-card">
+        <h3>💸 Payment History</h3>
+        <p class="form-subtitle">Payments that have been **Approved** by the administrator.</p>
 
         {% if user_payments %}
-            <table>
+            <table class="dark-table">
                 <thead>
                     <tr>
                         <th>Payment ID</th>
@@ -121,11 +108,11 @@
         {% endif %}
     </div>
 
-    <div class="dashboard-section">
+    <div class="dashboard-section dark-card">
         <h3>Quick Actions</h3>
-        <a href="{{ url_for('apply_loan') }}" class="btn primary-btn">Apply for Loan</a>
-        <a href="{{ url_for('payment') }}" class="btn secondary-btn">Make a Payment</a>
-        <a href="{{ url_for('update_profile') }}" class="btn tertiary-btn">Update Profile</a>
+        <a href="{{ url_for('apply_loan') }}" class="sign-in-button" style="display:inline-block; max-width: 300px; margin-right: 20px;">Apply for Loan</a>
+        <a href="{{ url_for('payment') }}" class="sign-in-button" style="display:inline-block; max-width: 300px; background-color: #ffd700; color: #333; margin-right: 20px;">Make a Payment</a>
+        <a href="{{ url_for('update_profile') }}" class="sign-in-button" style="display:inline-block; max-width: 300px; background-color: #75e0f3; color: #333;">Update Profile</a>
     </div>
 
 {% endif %}
