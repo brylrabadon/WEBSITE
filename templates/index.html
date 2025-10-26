@@ -5,14 +5,14 @@
     <title>LOAN SYSTEM - Log In</title>
     <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
 </head>
-<body>
+<body class="minimal-background">
 
     <div class="flash-message-container">
         {% with messages = get_flashed_messages(with_categories=true) %}
             {% if messages %}
                 <div class="flash-messages">
                     {% for category, message in messages %}
-                        <div class="{{ category }}">{{ message }}</div>
+                        <p class="{{ category }}">{{ message }}</p>
                     {% endfor %}
                 </div>
             {% endif %}
@@ -20,38 +20,45 @@
     </div>
 
     <nav class="top-nav">
+        <span class="logo">Bryl <3.</span>
         <ul class="nav-links-top">
             <li><a href="{{ url_for('home') }}">HOME</a></li>
             <li><a href="{{ url_for('about') }}">ABOUT US</a></li>
             <li><a href="{{ url_for('contact') }}">CONTACT</a></li>
+            <li><a href="{{ url_for('register') }}" class="btn-nav">Sign Up</a></li>
         </ul>
     </nav>
 
     <div class="wrapper">
-
         <div class="login-container">
-            <h2>LOG IN</h2>
+            <p class="form-subtitle">Welcome back</p>
+            <h2>Log In</h2>
             <form class="login-form" method="POST" action="{{ url_for('login') }}">
+
                 <div class="form-group">
-                    <input type="email" id="email" name="email" required placeholder="Email">
+                    <span class="input-icon">👤</span>
+                    <label for="email">Email:</label>
+                    <input type="email" id="email" name="email" required placeholder="Email Address">
                 </div>
 
                 <div class="form-group">
+                    <span class="input-icon">🔒</span>
+                    <label for="password">Password:</label>
                     <input type="password" id="password" name="password" required placeholder="Password">
                 </div>
 
-                <div class="form-actions">
+                <button type="submit" class="sign-in-button">LOG IN</button>
+
+                <div class="form-links">
+                    <label class="remember-me">
+                        <input type="checkbox" id="remember" name="remember"> Keep me logged in
+                    </label>
                     <a href="{{ url_for('forgot_password') }}">Forgot password?</a>
                 </div>
-
-                <button type="submit" class="sign-in-button">LOG IN</button>
             </form>
-        </div>
-
-        <div class="sign-container">
-            <h1>WELCOME!</h1>
-            <p>Register here if you don't have an account.</p>
-            <a href="{{ url_for('register') }}" class="sign-up-button">SIGN UP</a>
+            <p class="form-subtitle" style="margin-top: 20px;">
+                Don't have an account? <a href="{{ url_for('register') }}">Sign Up</a>
+            </p>
         </div>
     </div>
 

@@ -5,14 +5,14 @@
     <title>Register | Loan System</title>
     <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
 </head>
-<body>
+<body class="minimal-background">
 
     <div class="flash-message-container">
         {% with messages = get_flashed_messages(with_categories=true) %}
             {% if messages %}
                 <div class="flash-messages">
                     {% for category, message in messages %}
-                        <div class="{{ category }}">{{ message }}</div>
+                        <p class="{{ category }}">{{ message }}</p>
                     {% endfor %}
                 </div>
             {% endif %}
@@ -20,57 +20,68 @@
     </div>
 
     <nav class="top-nav">
+        <span class="logo">FinTech.</span>
         <ul class="nav-links-top">
             <li><a href="{{ url_for('home') }}">HOME</a></li>
             <li><a href="{{ url_for('about') }}">ABOUT US</a></li>
             <li><a href="{{ url_for('contact') }}">CONTACT</a></li>
+            <li><a href="{{ url_for('home') }}" class="btn-nav primary">Log In</a></li>
         </ul>
     </nav>
 
-    <div class="register-container">
-        <form class="register-form" method="POST" action="{{ url_for('register') }}">
+    <div class="wrapper">
+        <div class="register-container">
+            <p class="form-subtitle">Join us today</p>
             <h2>Create Account</h2>
+            <form class="register-form" method="POST" action="{{ url_for('register') }}">
 
-            {% if error %}
-                <p style="color:red; text-align:center;">{{ error }}</p>
-            {% endif %}
+                <div class="input-group-row">
+                    <div class="form-group">
+                        <span class="input-icon">🏷️</span>
+                        <label for="firstname">First Name:</label>
+                        <input type="text" id="firstname" name="firstname" required placeholder="First Name">
+                    </div>
+                    <div class="form-group">
+                        <span class="input-icon">🏷️</span>
+                        <label for="lastname">Last Name:</label>
+                        <input type="text" id="lastname" name="lastname" required placeholder="Last Name">
+                    </div>
+                </div>
 
-            <div class="form-group">
-                <label for="fullname">Full Name:</label>
-                <input type="text" id="fullname" name="fullname" required placeholder="Enter your full name">
-            </div>
+                <div class="form-group">
+                    <span class="input-icon">📧</span>
+                    <label for="email">Email Address:</label>
+                    <input type="email" id="email" name="email" required placeholder="Email Address">
+                </div>
 
-            <div class="form-group">
-                <label for="email">Email Address:</label>
-                <input type="email" id="email" name="email" required placeholder="Enter your email">
-            </div>
+                <div class="form-group">
+                    <span class="input-icon">🔒</span>
+                    <label for="password">Password:</label>
+                    <input type="password" id="password" name="password" required placeholder="Create Password">
+                </div>
 
-            <div class="form-group">
-                <label for="password">Password:</label>
-                <input type="password" id="password" name="password" required placeholder="Create a password">
-            </div>
+                <div class="form-group">
+                    <span class="input-icon">🔑</span>
+                    <label for="confirm_password">Confirm Password:</label>
+                    <input type="password" id="confirm_password" name="confirm_password" required placeholder="Confirm Password">
+                </div>
 
-            <div class="form-group">
-                <label for="confirm_password">Confirm Password:</label>
-                <input type="password" id="confirm_password" name="confirm_password" required placeholder="Re-enter password">
-            </div>
+                <div class="form-group">
+                    <label for="role">Account Type:</label>
+                    <select id="role" name="role" required>
+                        <option value="" disabled selected>Select Account Type</option>
+                        <option value="Borrower">Borrower</option>
+                        <option value="Admin">Admin</option>
+                    </select>
+                </div>
 
-            <div class="form-group">
-                <label for="role">Account Type:</label>
-                <select id="role" name="role" required>
-                    <option value="Borrower">Borrower</option>
-                    <option value="Admin">Admin</option>
-                </select>
-            </div>
+                <button type="submit" class="register-button">SIGN UP</button>
 
-            <button type="submit" class="register-button">REGISTER</button>
-
-            <div class="form-links">
-                Already have an account?
-                <a href="{{ url_for('home') }}">Log in</a>
-            </div>
-        </form>
+                <p class="form-subtitle" style="margin-top: 20px;">
+                    Already have an account? <a href="{{ url_for('home') }}">Log In</a>
+                </p>
+            </form>
+        </div>
     </div>
-
 </body>
 </html>

@@ -292,7 +292,9 @@ def admin_dashboard():
     with bryl.app_context():
         # Pending lists for approval tables
         pending_users = UserModel.query.filter_by(is_approved=False).all()
-        pending_loans = LoanModel.query.filter_by(status='Pending').all()
+
+        # FIX 1: Eagerly load the borrower for pending loans
+        pending_loans = LoanModel.query.filter_by(status='Pending').options(joinedload(LoanModel.borrower)).all()
 
         # CRITICAL FIX for previous 'NoneType' error: Use joinedload for borrower info
         pending_payments = PaymentModel.query.filter_by(status='Pending') \
@@ -300,8 +302,12 @@ def admin_dashboard():
 
         # All lists for general overview/links
         all_users = UserModel.query.all()
-        all_loans = LoanModel.query.all()
-        all_payments = PaymentModel.query.all()
+
+        # FIX 2: Eagerly load the borrower for all loans list
+        all_loans = LoanModel.query.options(joinedload(LoanModel.borrower)).all()
+
+        # FIX 3: Eagerly load the borrower for all payments list
+        all_payments = PaymentModel.query.options(joinedload(PaymentModel.borrower)).all()
 
     return render_template("admin_dashboard.html",
                            fullname=fullname,
@@ -311,9 +317,6 @@ def admin_dashboard():
                            user_count=len(all_users),
                            loan_count=len(all_loans),
                            payment_count=len(all_payments))
-
-
-# --- ADMIN VIEW ALL ROUTES ---
 @bryl.route('/admin/view_all_users')
 def view_all_users():
     if 'role' not in session or session['role'] != 'Admin':
@@ -358,7 +361,6 @@ def view_all_payments():
     return render_template("admin_view_all_payments.html", fullname=fullname, all_payments=all_payments)
 
 
-# --- ADMIN APPROVAL ROUTES ---
 
 @bryl.route('/admin/approve_user/<int:user_id>', methods=['POST'])
 def approve_user(user_id):

@@ -4,12 +4,13 @@
     <meta charset="UTF-8">
     <title>Apply for Loan</title>
     <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
 </head>
 <body>
     <nav class="dashboard-nav">
         </nav>
 
-    <div class="loan-application-container">
+    <div class="standalone-form-container">
 
         {% with messages = get_flashed_messages(with_categories=true) %}
           {% if messages %}
@@ -21,31 +22,36 @@
           {% endif %}
         {% endwith %}
 
-        <div class="form-card">
-            <h2>Apply for Loan</h2>
+        <div class="standalone-wrapper">
+    <div class="standalone-form-container">
+        <h2>Apply For Loan</h2>
+                <form action="/submit_loan" method="post">
 
-            <form action="{{ url_for('apply_loan') }}" method="POST">
+                    <div class="form-group">
+                        <i class="fas fa-dollar-sign"></i>
+                        <input type="number" id="loan_amount" name="loan_amount" placeholder="Amount" required>
+                    </div>
 
-                <div class="form-group">
-                    <label for="amount">Loan Amount (PHP):</label>
-                    <input type="number" step="0.01" id="amount" name="amount" required min="1000">
-                </div>
+                    <div class="form-group">
+                        <i class="fas fa-clipboard-list"></i>
+                        <input type="text" id="loan_purpose" name="loan_purpose" placeholder="Purpose" required>
+                    </div>
 
-                <div class="form-group">
-                    <label for="interest_rate">Annual Interest Rate (%):</label>
-                    <input type="number" step="0.01" id="interest_rate" name="interest_rate" required min="0.1" max="100">
-                </div>
+                    <div class="form-group">
+                        <i class="fas fa-clock"></i>
+                        <input type="number" id="loan_term" name="loan_term" placeholder="Term (in months)" required>
+                    </div>
 
-                <div class="form-group">
-                    <label for="term_months">Loan Term (Months):</label>
-                    <input type="number" id="term_months" name="term_months" required min="6" max="120">
-                </div>
+                    <div class="form-group">
+                        <i class="fas fa-money-check-alt"></i>
+                        <input type="number" id="annual_income" name="annual_income" placeholder="Annual Income" required>
+                    </div>
 
-                <button type="submit" class="loan-submit-button">Submit Application</button>
-                <div class="form-links">
-                    <a href="{{ url_for('dashboard') }}" class="secondary-btn btn" style="margin-top: 15px;">Cancel</a>
-                </div>
-            </form>
+                    <button type="submit" class="loan-submit-button">Submit Application</button>
+
+                    <a href="/dashboard" class="btn-cancel">Cancel</a>
+                </form>
+            </div>
         </div>
     </div>
 </body>

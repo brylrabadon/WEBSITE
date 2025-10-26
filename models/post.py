@@ -23,6 +23,7 @@ class LoanModel(db.Model):
     amount = db.Column(db.Float, nullable=False)
     interest_rate = db.Column(db.Float, nullable=False)
     term_months = db.Column(db.Integer, nullable=False)
+    # CRITICAL: This stores the current outstanding balance, initially equal to amount
     balance = db.Column(db.Float, nullable=False)
     status = db.Column(db.String(50), default='Pending', nullable=False)
     application_date = db.Column(db.DateTime, default=datetime.utcnow)
@@ -53,12 +54,55 @@ class PaymentModel(db.Model):
 
 
 # -----------------------------------------------------------
-# 2. Repository Class (All methods checked for app_context)
+# 2. Repository Class (Added create_loan and create_payment)
 # -----------------------------------------------------------
 
 class Post:
     def __init__(self, db_connection):
         self.db = db_connection
+
+    # --- FIX 1: Add create_loan method to resolve the 'Post' object error ---
+    def create_loan(self, user_id, amount, interest_rate, term_months):
+        """Creates a new loan application in the database with status='Pending'."""
+        new_loan = LoanModel(
+            user_id=user_id,
+            amount=amount,
+            interest_rate=interest_rate,
+            term_months=term_months,
+            balance=amount,  # CRITICAL: Initial balance equals the amount
+            status='Pending'
+        )
+        with current_app.app_context():
+            try:
+                db.session.add(new_loan)
+                db.session.commit()
+                return True
+            except Exception as e:
+                current_app.logger.error(f"Error creating loan: {e}")
+                db.session.rollback()
+                return False
+
+    # --- FIX 2: Add create_payment method for payment requests ---
+    def create_payment(self, user_id, loan_id, amount, method):
+        """Creates a new payment request in the database with status='Pending'."""
+        new_payment = PaymentModel(
+            user_id=user_id,
+            loan_id=loan_id,
+            amount=amount,
+            method=method,
+            status='Pending'
+        )
+        with current_app.app_context():
+            try:
+                db.session.add(new_payment)
+                db.session.commit()
+                return True
+            except Exception as e:
+                current_app.logger.error(f"Error creating payment: {e}")
+                db.session.rollback()
+                return False
+
+    # --- Existing Post Methods Below ---
 
     def create_post(self, content, user_id):
         new_post = PostModel(content=content, user_id=user_id)
@@ -82,7 +126,8 @@ class Post:
 
     def update_post(self, post_id, content):
         with current_app.app_context():
-            post = self.get_post_by_id(post_id)
+            # Use query directly inside context instead of calling self.get_post_by_id
+            post = PostModel.query.get(post_id)
             if not post: return False
 
             post.content = content
@@ -96,7 +141,8 @@ class Post:
 
     def delete_post(self, post_id):
         with current_app.app_context():
-            post = self.get_post_by_id(post_id)
+            # Use query directly inside context instead of calling self.get_post_by_id
+            post = PostModel.query.get(post_id)
             if not post: return False
 
             try:
